@@ -1,0 +1,52 @@
+[
+  {
+    "input": {
+      "ValueStation": "500",
+      "Radius": "50",
+      "Value": "5000",
+      "ID": "11",
+      "NumberMaxStation": 10
+    },
+    "output": true
+  },
+  {
+    "input": {
+      "ValueStation": "500",
+      "Radius": "50",
+      "Value": "-5000",
+      "ID": "11",
+      "NumberMaxStation": 10
+    },
+    "output": false
+  },
+  {
+    "input": {
+      "ValueStation": "-500",
+      "Radius": "50",
+      "Value": "5000",
+      "ID": "11",
+      "NumberMaxStation": 10
+    },
+    "output": false
+  },
+  {
+    "input": {
+      "ValueStation": "50000",
+      "Radius": "50",
+      "Value": "5000",
+      "ID": "11",
+      "NumberMaxStation": 10
+    },
+    "output": false
+  },
+  {
+    "input": {
+      "ValueStation": "0",
+      "Radius": "50",
+      "Value": "5000",
+      "ID": "11",
+      "NumberMaxStation": 10
+    },
+    "output": false
+  }
+]

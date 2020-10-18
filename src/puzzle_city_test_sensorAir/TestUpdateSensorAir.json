@@ -1,0 +1,10 @@
+{
+"id":"0",
+"address":"Rue de Sarkozy",
+"no2":"500",
+"pm10":"100",
+"o3":"300",
+"alert":"false",
+"alert_id":"0",
+"isActivated":"false"
+}

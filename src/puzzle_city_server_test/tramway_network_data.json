@@ -1,0 +1,22 @@
+[
+  {
+    "input": {
+      "cHeight": "400",
+      "cWidth": "600",
+      "maxPoint" : "10",
+      "bRadius": "30"
+
+    },
+    "output": 10
+  },
+  {
+    "input": {
+      "cHeight": "400",
+      "cWidth": "600",
+      "maxPoint": "10",
+      "bRadius": "500"
+
+    },
+    "output": 1
+  }
+]
