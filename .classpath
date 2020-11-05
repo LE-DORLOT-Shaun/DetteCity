@@ -9,5 +9,5 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/DetteCity/java-json.jar"/>
 	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/DetteCity/json-simple-1.1.1.jar"/>
-	<classpathentry kind="output" path="namai-city/bin"/>
+	<classpathentry kind="output" path="dettecity/bin"/>
 </classpath>

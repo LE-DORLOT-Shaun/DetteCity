@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>namai-city</name>
+	<name>DetteCity</name>
 	<comment></comment>
 	<projects>
-		<project>namai-city-client</project>
+		<project>dettecity-client</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
