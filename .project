@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>puzzlecity_project</name>
+	<name>namai-city</name>
 	<comment></comment>
 	<projects>
+		<project>namai-city-client</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
