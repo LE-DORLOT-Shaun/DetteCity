@@ -8,11 +8,11 @@ import controller.DBConnectController;
 import view.TestPoolView;
 
 public class Main {
-	static DBConnectController namaicityController;
+	static DBConnectController Controller;
 
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-		namaicityController = new DBConnectController(new TestPoolView());
-		namaicityController.start();
+		Controller = new DBConnectController(new TestPoolView());
+		Controller.start();
 	}
 
 }

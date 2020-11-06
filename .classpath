@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="dettecity-commons"/>
 	<classpathentry kind="src" path="dettecity-server"/>
-	<classpathentry kind="src" path="dettecity-client"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>

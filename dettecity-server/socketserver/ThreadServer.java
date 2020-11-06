@@ -18,7 +18,7 @@ import commons.DataSource;
 import bollards.BollardsTests;
 import bollards.Bollards;
 import bollards.VehiculeManagement;
-import carsSensors.CarSensors;
+import bollards.VehiculeSensors;
 import controller.DBConnectController;
 import entities.AlertePolluant;
 import entities.CapteurPolluant;
@@ -121,7 +121,7 @@ public class ThreadServer extends Thread {
 					JSONObject obja = new JSONObject();
 					obja.put("reponse", String.valueOf("la simulation a été lancé"));
 					outJson.println(obj1); 
-					CarSensors test = new CarSensors(c, inputStream);
+					VehiculeSensors test = new VehiculeSensors(c, inputStream);
 					test.start();  
 				}
 				
