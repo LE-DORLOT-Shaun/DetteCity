@@ -1,4 +1,4 @@
-package com.client.application;
+package Tests;
 
 import java.awt.FlowLayout;
 import java.io.IOException;
@@ -19,8 +19,8 @@ import javax.swing.*;
 
 import org.json.simple.JSONObject;
 
-import com.client.controller.SocketClient;
-import com.commons.model.AccessServer;
+import commons.SocketClient;
+import com.AccessServer;
 
 import indicator.CarIndicator;
 //import indicator.PersonStationIndicator;
@@ -34,7 +34,7 @@ import indicator.StationIndicator;
 public class TestJson {
 	private SocketClient client = new SocketClient();
 	public static Connection c; 
-	private static String URL = "jdbc:postgresql://172.31.249.44:5432/NamaiDB";
+	private static String URL = "jdbc:postgresql://172.31.249.135:5432/dettecitydb";
 	private static String login = "toto" ;
 	private static String password = "toto";
 

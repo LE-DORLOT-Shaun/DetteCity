@@ -1,4 +1,4 @@
-package com.client.application;
+package Tests;
 
 import java.io.IOException;
 import java.sql.Connection;

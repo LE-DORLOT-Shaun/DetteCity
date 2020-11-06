@@ -1,5 +1,5 @@
 /*
-package com.client.application;
+package commons;
 
 import com.client.controller.ApplicationController;
 import com.client.controller.ConnectionController;
@@ -31,7 +31,7 @@ private static ConnectionNamaiCity test = new ConnectionNamaiCity();
 
 }
 */
-package com.client.application;
+package commons;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

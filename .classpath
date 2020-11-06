@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="dettecity-commons"/>
 	<classpathentry kind="src" path="dettecity-server"/>
+	<classpathentry kind="src" path="dettecity-client"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
@@ -9,5 +10,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/DetteCity/java-json.jar"/>
 	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/DetteCity/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/DetteCity/librairies/postgresql-42.2.2.jre7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/namai-city-master/namai-city-master/librairies/swingx-1.6.1.jar"/>
 	<classpathentry kind="output" path="dettecity/bin"/>
 </classpath>

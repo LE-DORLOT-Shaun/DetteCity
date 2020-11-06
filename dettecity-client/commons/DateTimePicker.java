@@ -1,4 +1,4 @@
-package com.client.application;
+package commons;
 
 import org.jdesktop.swingx.calendar.SingleDaySelectionModel;
 import org.jdesktop.swingx.JXDatePicker;
@@ -107,4 +107,3 @@ public class DateTimePicker extends JXDatePicker {
         updateTextFieldFormat();
     }
 }
-5
