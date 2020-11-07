@@ -20,16 +20,15 @@ import bollards.Bollards;
 import bollards.VehiculeManagement;
 import bollards.VehiculeSensors;
 import controller.DBConnectController;
-import entities.AlertePolluant;
+/*import entities.AlertePolluant;
 import entities.CapteurPolluant;
 import entities.HistoriqueCapteurPolluant;
 import indicator.Car;
 import indicator.Sensor;
-import indicator.SensorPolluant;
+import indicator.SensorPolluant; */
 
 import java.io.*; 
 import java.net.*;
-//
 
 public class ThreadServer extends Thread {
 	private Socket clientSocket; 
@@ -51,49 +50,49 @@ public class ThreadServer extends Thread {
 			outJson = new PrintWriter(clientSocket.getOutputStream(), true);
 			inJson = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-			do {
+		do {
 				
-				InputStream inputStream = FileReader.class.getClassLoader().getSystemResourceAsStream("simulation.json"); 
-				// processing part of Json 
-				outJson = new PrintWriter(clientSocket.getOutputStream(), true);
-				inJson = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				this.bollards = new Bollards(this.c);
-				Object obj1 = new Object();
-				String resp = inJson.readLine();
-				System.out.println("----bonjour je viens de récuperer le JSON");
-				System.out.println(resp);
-				Object obj=JSONValue.parse(resp); 
-				System.out.println("----bonjour je parse le JSON");
-				System.out.println(resp);
-				JSONObject jsonObject = (JSONObject) obj;  
-				System.out.println("----bonjour je viens de parser le JSON");
-				System.out.println(resp);
-				
-				
-				/*calls the bornesState method from Bornes to get the states and
-				 * send the result to the client in a JSON File using the socket if 
-				 * it gets a demand from the client
-				 */
-				if(jsonObject.get("demandType").equals("getInitialInfos")) {
-					new VehiculeManagement(c);
-					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.maxCars);
-					obj1 = bollards.bollardsState();
-					outJson.println(obj1);
-				}
-				
-				/*calls the riseBornes method from Bornes to change the states of the bornes to 1
-				 * send the success or fail messsage to the client in a JSON File using the socket
-				 */
-				
-				if(jsonObject.get("demandType").equals("RiseBornes")) {
-					obj1 = bollards.risebollards();
-					outJson.println(obj1); 
-				}
+			InputStream inputStream = FileReader.class.getClassLoader().getSystemResourceAsStream("simulation.json"); 
+			// processing part of Json 
+			outJson = new PrintWriter(clientSocket.getOutputStream(), true);
+			inJson = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			this.bollards = new Bollards(this.c);
+			Object obj1 = new Object();
+			String resp = inJson.readLine();
+			System.out.println("----bonjour je viens de récuperer le JSON");
+			System.out.println(resp);
+			Object obj=JSONValue.parse(resp); 
+			System.out.println("----bonjour je parse le JSON");
+			System.out.println(resp);
+			JSONObject jsonObject = (JSONObject) obj;  
+			System.out.println("----bonjour je viens de parser le JSON");
+			System.out.println(resp);
 				
 				
-				/*calls the LowerBornes method from Bollards to change the states of the bollards to 0
-				 * send the success or fail messsage to the client in a JSON File using the socket
-				 */
+			/*calls the bornesState method from Bornes to get the states and
+			 * send the result to the client in a JSON File using the socket if 
+			 * it gets a demand from the client
+			 */
+			if(jsonObject.get("demandType").equals("getInitialInfos")) {
+				new VehiculeManagement(c);
+				System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.maxCars);
+				obj1 = bollards.bollardsState();
+				outJson.println(obj1);
+			}
+				
+			/*calls the riseBornes method from Bornes to change the states of the bornes to 1
+			 * send the success or fail messsage to the client in a JSON File using the socket
+			 */
+				
+			if(jsonObject.get("demandType").equals("RiseBornes")) {
+				obj1 = bollards.risebollards();
+				outJson.println(obj1); 
+			}
+				
+				
+			/*calls the LowerBornes method from Bollards to change the states of the bollards to 0
+			 * send the success or fail messsage to the client in a JSON File using the socket
+			 */
 				
 				if(jsonObject.get("demandType").equals("LowerBornes")) {
 					obj1 = bollards.lowerbollards();
@@ -383,7 +382,7 @@ public class ThreadServer extends Thread {
 
 				return obj; 
 			}
-			if(JsonRecu.get("demandType").equals("SEND_MESSAGE_CAPTEUR_POLLUANT")) {
+/*			if(JsonRecu.get("demandType").equals("SEND_MESSAGE_CAPTEUR_POLLUANT")) {
 
 				//Timestamp start_date =(String) JsonRecu.get("start_date");
 				String val_co2 =(String) JsonRecu.get("val_co2");
@@ -426,7 +425,7 @@ public class ThreadServer extends Thread {
 				System.out.println(obj);
 				return obj; 
 			}
-
+*/
 			if(JsonRecu.get("demandType").equals("UPDATE")) {
 				System.out.println("Je suis rentré dans la requete UPDATE");
 				String nomUpdate =(String) JsonRecu.get("nom");
@@ -490,7 +489,7 @@ public class ThreadServer extends Thread {
 				SensorInsert sensorInsert = new SensorInsert(); 
 				sensorInsert.insertSensor(JsonRecu, c); 
 			}*/
-
+/*
 			if (JsonRecu.get("demandType").equals("MOCK_CAR_INSERT")) {
 				System.out.println("FREQUENTATION-VOITURE");
 				CarInsert carInsert = new CarInsert(); 
@@ -513,11 +512,11 @@ public class ThreadServer extends Thread {
 				System.out.println("Sensor car"); 
 				SensorCarInsert sensorCarInsert = new SensorCarInsert(); 
 				sensorCarInsert.insertSensorCar(JsonRecu,c); 
-			}
+			}*/
 			// FIN MOCK TEST 
 			
 						// BEGIN TEST REQUESTS
-
+/*
 						if (JsonRecu.get("demandType").equals("SENSOR_INDICATOR2")) {
 
 							System.out.println("le nombre de capteurs par zone selon la date et le type (qualité de l'air, borne...."); 
@@ -526,8 +525,8 @@ public class ThreadServer extends Thread {
 							JSONObject obj = sensor.getIndicatorBorne(JsonRecu,c);
 							return obj; 
 
-						}
-						if (JsonRecu.get("demandType").equals("SENSOR_INDICATOR3")) {
+						}*/
+/*						if (JsonRecu.get("demandType").equals("SENSOR_INDICATOR3")) {
 
 							System.out.println("le nombre de capteurs par zone selon la date et le type (qualité de l'air, borne...."); 
 							Sensor sensor = new Sensor(); 
@@ -594,14 +593,14 @@ public class ThreadServer extends Thread {
 						}
 						
 						
-						
+*/						
 					} catch (Exception e) {
 						e.printStackTrace();
 					} 
 					// Case where no if is checked 
 					return new JSONObject();
 				}
-	private void detection_alerte_pollution(HistoriqueCapteurPolluant h) throws SQLException {
+/*	private void detection_alerte_pollution(HistoriqueCapteurPolluant h) throws SQLException {
 		// récupration du capteur
 		CapteurPolluant cp =  this.selectCapteurPolluant(h);
 
@@ -742,6 +741,6 @@ public class ThreadServer extends Thread {
 		// query execution 
 		stmtAlerte.execute();
 	}
-	
+*/	
 
 }

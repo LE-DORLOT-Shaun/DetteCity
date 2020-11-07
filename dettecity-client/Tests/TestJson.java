@@ -22,11 +22,11 @@ import org.json.simple.JSONObject;
 import commons.SocketClient;
 import com.AccessServer;
 
-import indicator.CarIndicator;
+//import indicator.CarIndicator;
 //import indicator.PersonStationIndicator;
-import indicator.SensorIndicator;
-import indicator.SensorPolluantIndicator;
-import indicator.StationIndicator;
+//import indicator.SensorIndicator;
+//import indicator.SensorPolluantIndicator;
+//import indicator.StationIndicator;
 //import indicator.WarningIndicator;
 
 
@@ -176,7 +176,7 @@ public class TestJson {
 	}
 	
 	//method for recover the number of pollutant sensors in the city
-		public ArrayList<SensorIndicator> goSensor() throws SQLException, IOException {
+/*		public ArrayList<SensorIndicator> goSensor() throws SQLException, IOException {
 			client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
 			JSONObject obj = new JSONObject();
 
@@ -206,6 +206,7 @@ public class TestJson {
 			client.stopConnection();
 			return liste;
 		}
+
 	//method for recover the number of terminals in the city as a list
 			public ArrayList<SensorIndicator> goBorne() throws SQLException, IOException {
 			client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
@@ -451,9 +452,9 @@ public class TestJson {
 
 			}
 		}
-
+*/
 		// recovery of each warning 
-		public ArrayList<SensorPolluantIndicator> getWarning(String nomPolluant, Integer idCapteur,
+/*		public ArrayList<SensorPolluantIndicator> getWarning(String nomPolluant, Integer idCapteur,
 				List<Integer> listeSeuil) throws IOException {
 
 			client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
@@ -526,7 +527,7 @@ public class TestJson {
 			return listeResultat;
 		}
 
-	
+	*/
 
 	public void go() throws SQLException, IOException {
 
@@ -723,7 +724,7 @@ public class TestJson {
 			default:
 				System.out.println("Unrocognized command");
 				break;
-				
+/*				
 			case "7": 
 				System.out.println("########################### SENSOR INDICATOR #########################");
 				System.out.println("A quel date voulez-vous récupèrer les données du capteur de la qualité de l'air? ");

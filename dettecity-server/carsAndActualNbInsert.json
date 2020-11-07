@@ -1,0 +1,29 @@
+[
+
+    {
+    "id_sensor" : 1,
+    "objet" : "audi",
+    "type" : "voiture"
+        },
+    {
+    "id_sensor" : 1,
+    "objet" : "Renault",
+    "type" : "voiture"
+        },
+    {
+    "id_sensor" : 1,
+    "objet" : "Nissan",
+    "type" : "voiture"
+        },
+{
+    "id_sensor" : 1,
+    "objet" : "Peugeot",
+    "type" : "voiture"
+        },    
+{
+    "id_sensor" : 2,
+    "objet" : "Mercedes",
+    "type" : "Camion"
+        }   
+  
+    ]

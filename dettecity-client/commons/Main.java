@@ -37,10 +37,10 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 
-import com.client.controller.ApplicationController;
-import com.client.controller.ConnectionController;
-import com.client.controller.ControllerPollution;
-import com.client.view.ConnectionNamaiCity;
+//import com.client.controller.ApplicationController;
+//import com.client.controller.ConnectionController;
+//import com.client.controller.ControllerPollution;
+//import com.client.view.ConnectionNamaiCity;
 
 
 

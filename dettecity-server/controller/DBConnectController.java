@@ -15,24 +15,24 @@ import org.json.simple.JSONObject;
 import commons.DataSource;
 import model.ModelTestPool;
 import socketserver.ThreadServer;
-import view.TestPoolView;
+//import view.TestPoolView;
 
 
 
 public class DBConnectController {
 	private ModelTestPool userModel;
-	private TestPoolView shsView;
+	//private TestPoolView shsView;
 	private Scanner sc = new Scanner(System.in);
 	private ServerSocket socketServeur;
 	private Socket socketClient;
 	private static int numberOfConnectedClients = 0; 
 
 
-	public DBConnectController(TestPoolView v) throws SQLException, ClassNotFoundException {
+/*	public DBConnectController(TestPoolView v) throws SQLException, ClassNotFoundException {
 		userModel = new ModelTestPool();
 		shsView = v;
 	}
-
+*/
 	public void start() throws SQLException, IOException  {
 		String rep = "";
 		List<Connection> co =new ArrayList();
@@ -59,10 +59,10 @@ public class DBConnectController {
 
 				co.add(DataSource.getConnection());
 				//c = DataSource.getConnection();
-				shsView.printScreen("Size of the pool: "+DataSource.getSize());
+				/*shsView.printScreen("Size of the pool: "+DataSource.getSize());
 				shsView.printScreen("Number of connection asked: "+co.size());
 				c = co.get(0);
-				shsView.printScreen("Size of the pool: "+ DataSource.getSize());
+				shsView.printScreen("Size of the pool: "+ DataSource.getSize());*/
 				System.out.println("bonjour je vais traiter votre demande");
 
 

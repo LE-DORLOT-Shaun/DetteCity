@@ -12,18 +12,18 @@ import java.util.Scanner;
 
 import org.json.simple.JSONObject;
 
-import com.client.controller.SocketClient;
-import com.commons.model.AccessServer;
+import commons.SocketClient;
+import com.AccessServer;
 
-import indicator.CarIndicator;
-import indicator.SensorIndicator;
-import indicator.StationIndicator;
+//import indicator.CarIndicator;
+//import indicator.SensorIndicator;
+//import indicator.StationIndicator;
 
 
 public class TestCLI {
 	private SocketClient client = new SocketClient();
 	public static Connection c; 
-	private static String URL = "jdbc:postgresql://172.31.249.44:5432/NamaiDB";
+	private static String URL = "jdbc:postgresql://172.31.249.135:5432/dettecitydb";
 	private static String login = "toto" ;
 	private static String password = "toto";
 
