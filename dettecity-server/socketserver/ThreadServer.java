@@ -216,7 +216,7 @@ public class ThreadServer extends Thread {
 					while (rs2.next()) {
 						JSONObject user=new JSONObject();
 						// recovery of each user's data (id/ name/ first name) 
-						user.put("Id", rs2.getInt("id_user"));
+						user.put("Id", rs2.getInt("id"));
 						user.put("nom", rs2.getString("nom"));
 						user.put("prenom", rs2.getString("prenom"));
 
@@ -237,7 +237,7 @@ public class ThreadServer extends Thread {
 					return obj; 
 				}
 				else {
-					PreparedStatement stmtJson = c.prepareStatement("select * from utilisateur where id_user = ?");
+					PreparedStatement stmtJson = c.prepareStatement("select * from utilisateur where id = ?");
 					stmtJson.setInt(1, idJson);
 					ResultSet jsonResponse = stmtJson.executeQuery();
 					JSONObject obj=new JSONObject(); 
@@ -246,7 +246,7 @@ public class ThreadServer extends Thread {
 					while (jsonResponse.next()) {
 						//recovery of the data of the user in question 
 						cpt++;
-						obj.put("Id",jsonResponse.getInt("id_user"));
+						obj.put("Id",jsonResponse.getInt("id"));
 						obj.put("nom",jsonResponse.getString("nom"));
 						obj.put("prenom",jsonResponse.getString("prenom"));
 					}

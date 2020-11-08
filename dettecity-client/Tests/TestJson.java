@@ -50,9 +50,10 @@ public class TestJson {
 	}
 	
 	public static void main(String [] args) throws SQLException, IOException {
-	//	TestJson t = new TestJson();
-		PagePrincipale page = new PagePrincipale();
-		page.setVisible(true);
+		TestJson t = new TestJson();
+		t.go();
+//		PagePrincipale page = new PagePrincipale();
+//		page.setVisible(true);
 	
 		
 	}
@@ -537,7 +538,7 @@ public class TestJson {
 		Scanner sc = new Scanner(System.in);
 		
 		while(true) { // Menu display
-			System.out.println("########################### Menu Namai-city-client #########################");
+			System.out.println("########################### Menu DetteCity-client #########################");
 			System.out.println("1: Afficher");
 			System.out.println("2: Créer");
 			System.out.println("3: Mettre à jour");
@@ -549,7 +550,7 @@ public class TestJson {
 			System.out.println("9: récupération de l'indicateur du nombre d'alertes");
 			System.out.println("10: récupération de l'indicateur du nombre de stations");
 			System.out.println("11: récupération de l'indicateur du nombre de personnes par station");
-			System.out.println("########################### Menu Namai-city-client #########################");
+			System.out.println("########################### Menu DetteCity-client #########################");
 			
 			client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
 			JSONObject obj=new JSONObject();  //JSONObject creation
@@ -558,10 +559,10 @@ public class TestJson {
 
 			switch (rep) {
 			case "1":
-				System.out.println("########################### Menu Namai-city-client #########################");
+				System.out.println("########################### Menu DetteCity-client #########################");
 				System.out.println("1: Afficher tout les utilisateurs");
 				System.out.println("2: afficher un utilisateur en particulier");
-				System.out.println("########################### Menu Namai-city-client #########################");	
+				System.out.println("########################### Menu DetteCity-client #########################");	
 				Scanner choice = new Scanner(System.in);
 				rep = choice.nextLine(); 
 				switch(rep) {

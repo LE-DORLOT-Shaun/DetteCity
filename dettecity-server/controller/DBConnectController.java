@@ -41,7 +41,7 @@ public class DBConnectController {
 		System.out.println("Bonjour, Bienvenue sur votre serveur!"); 
 
 		// Socket creation on the server side 
-		socketServeur = new ServerSocket(5432);
+		socketServeur = new ServerSocket(6666);
 
 		System.out.println("====================================================");
 		System.out.println("=== Voici le nombre de clients connectés : " + numberOfConnectedClients); 
