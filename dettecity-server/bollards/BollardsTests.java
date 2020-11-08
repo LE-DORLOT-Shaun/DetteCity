@@ -105,7 +105,7 @@ public class BollardsTests {
 			String dateFin = String.valueOf(jsonObject.get("date_fin"));
 			String type = String.valueOf(jsonObject.get("type"));
 			String zone = String.valueOf(jsonObject.get("zone"));
-			carsFilter = cars.SearchCars(dateDebut, dateFin, zone, type);
+//			carsFilter = cars.SearchCars(dateDebut, dateFin, zone, type);
 			System.out.println("voici la liste des voitures retrouvé: ");
 			System.out.println(carsFilter);
 			carsList.add((JSONObject) carsFilter);

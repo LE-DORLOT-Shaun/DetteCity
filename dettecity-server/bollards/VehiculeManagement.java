@@ -36,7 +36,7 @@ public class VehiculeManagement {
 	 * used by the Thread server and sent to the Client
 	 */
 	public int getCars() throws SQLException, InterruptedException {
-		PreparedStatement stmtJson = c.prepareStatement("SELECT nb_voitures FROM frequentation_voiture ORDER BY date DESC LIMIT 1");
+		PreparedStatement stmtJson = c.prepareStatement("SELECT vehicule_nb FROM traffic ORDER BY date DESC LIMIT 1");
 		ResultSet response = stmtJson.executeQuery();
 		int cpt = 0;
 		int voitures = 0;
@@ -44,7 +44,7 @@ public class VehiculeManagement {
 		while (response.next())  {
 			//recovery of the data of the the table in question 
 			cpt++;
-			voitures = response.getInt("nb_voitures");
+			voitures = response.getInt("vehicule_nb");
 		}
 		if(cpt == 0) {
 			voitures = 0;
@@ -60,21 +60,21 @@ public class VehiculeManagement {
 	 */
 	
 	public int carsLimit() throws SQLException, InterruptedException {
-		PreparedStatement stmtJson = c.prepareStatement("SELECT max_voitures FROM voitures_limit");
+		PreparedStatement stmtJson = c.prepareStatement("SELECT vehicule_threshold FROM threshold");
 		ResultSet response = stmtJson.executeQuery();
 		int cpt = 0;
-		int maxVoitures = 0;
+		int threshold = 0;
 
 		while (response.next())  {
 			//recovery of the data of the user in question 
 			cpt++;
-			maxVoitures = response.getInt("max_voitures");
+			threshold = response.getInt("vehicule_threshold");
 		}
 		if(cpt == 0) {
 			System.out.println("erreur lors de la recuperation du maxVehicules");
 		}
 		// displaying the json 
-		return maxVoitures; 
+		return threshold; 
 	}
 	
 	/* method used to update the max cars in town
@@ -83,7 +83,7 @@ public class VehiculeManagement {
 	
 	public JSONObject updateMaxCars(int maxCars) throws SQLException {
 		System.out.println(maxCars);
-		PreparedStatement stmt = c.prepareStatement("update voitures_limit set max_voitures= ?, last_update= current_timestamp;");
+		PreparedStatement stmt = c.prepareStatement("update threshold set vehicule_threshold= ?, last_update= current_timestamp;");
 		stmt.setInt(1, maxCars); 
 		JSONObject obj=new JSONObject(); 
 
@@ -107,7 +107,7 @@ public class VehiculeManagement {
 	
 	public Object addCarToHistory(String vehicule, String type, int sensorId ) throws SQLException, InterruptedException {
 		System.out.println("je suis ici");
-		PreparedStatement stmt = c.prepareStatement("insert into historique_vehicules values(?,?,CURRENT_TIMESTAMP,?);");
+		PreparedStatement stmt = c.prepareStatement("insert into vehicule_history values(?,?,CURRENT_TIMESTAMP,?);");
 		 
 		stmt.setString(1, vehicule);
 		stmt.setString(2, type);
@@ -131,7 +131,7 @@ public class VehiculeManagement {
 	
 	
 	public void adjustCarsNb(String vehicule, String type) throws SQLException, InterruptedException {
-		PreparedStatement stmtGetInfos = c.prepareStatement("SELECT passage_sensor FROM historique_vehicules where voiture=? AND type=? ORDER BY schedule DESC LIMIT 1;");
+		PreparedStatement stmtGetInfos = c.prepareStatement("SELECT sensor_id FROM vehicule_history where brand=? AND type=? ORDER BY schedule DESC LIMIT 1;");
 		stmtGetInfos.setString(1, vehicule);
 		stmtGetInfos.setString(2, type);
 		ResultSet response = stmtGetInfos.executeQuery();
@@ -140,14 +140,14 @@ public class VehiculeManagement {
 
 		while (response.next())  { 
 			cpt++;
-			sensor = response.getInt("passage_sensor");
+			sensor = response.getInt("sensor_id");
 		}
 		if(cpt == 0) {
 			sensor = 0;
 		}
 		
 		
-		PreparedStatement stmtGetSensor = c.prepareStatement("SELECT type FROM capteur_vehicule where id_capteur=?;");
+		PreparedStatement stmtGetSensor = c.prepareStatement("SELECT type FROM vehicule_sensor where id=?;");
 		stmtGetSensor.setInt(1, sensor);
 		ResultSet responseSensor = stmtGetSensor.executeQuery();
 		cpt = 0;
@@ -166,7 +166,7 @@ public class VehiculeManagement {
 		
 		if(sensorType.equals("IN")) {
 			currentNbCars++;
-			PreparedStatement stmt = c.prepareStatement("insert into frequentation_voiture(nb_voitures, date) values (?,CURRENT_TIMESTAMP);");
+			PreparedStatement stmt = c.prepareStatement("insert into traffic(vehicule_nb, date) values (?,CURRENT_TIMESTAMP);");
 			stmt.setInt(1, currentNbCars);		
 
 		
@@ -183,7 +183,7 @@ public class VehiculeManagement {
 		
 		if(sensorType.equals("OUT")) {
 			currentNbCars--;
-			PreparedStatement stmt = c.prepareStatement("insert into frequentation_voiture(nb_voitures, date) values (?,CURRENT_TIMESTAMP);");
+			PreparedStatement stmt = c.prepareStatement("insert into traffic(vehicule_nb, date) values (?,CURRENT_TIMESTAMP);");
 			stmt.setInt(1, currentNbCars);		
 
 			if(stmt.executeUpdate()>=1) {
@@ -199,8 +199,8 @@ public class VehiculeManagement {
 		this.totalCars = currentNbCars;
 	}
 	
-	public Object SearchCars(String dateDebut, String dateFin, String zone, String type) throws SQLException, InterruptedException {
-		String request = "SELECT voiture, schedule, position, cap.type as type_cap   FROM historique_vehicules hv, (select * from capteur_vehicule) cap where hv.passage_sensor = cap.id_capteur AND ";
+/*	public Object SearchCars(String dateDebut, String dateFin, String zone, String type) throws SQLException, InterruptedException {
+		String request = "SELECT brand, schedule, position, cap.type as type_cap   FROM vehicule_history hv, (select * from vehicule_sensor) cap where hv.sensor_id = cap.id AND ";
 		if(type.equals("Sortie")) {
 			type = "OUT";
 		}
@@ -243,7 +243,7 @@ public class VehiculeManagement {
 		obj.put("voitures", listvoitures);
 		return obj; 
 	}
-	
+	*/
 	//function used to get the pollution alert if it is raised or not
 	
 	public Object PollutionAlert() throws SQLException, InterruptedException {

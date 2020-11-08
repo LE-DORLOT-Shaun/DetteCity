@@ -135,7 +135,7 @@ public class ThreadServer extends Thread {
 					String type = String.valueOf(jsonObject.get("type"));
 					String zone = String.valueOf(jsonObject.get("zone"));
 					VehiculeManagement cars = new VehiculeManagement(c);
-					objSearch = cars.SearchCars(dateDebut, dateFin, zone, type);
+//					objSearch = cars.SearchCars(dateDebut, dateFin, zone, type);
 					System.out.println("voici la liste des voitures retrouvé: ");
 					System.out.println(objSearch);
 					outJson.println(objSearch); 

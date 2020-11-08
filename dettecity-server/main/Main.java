@@ -11,7 +11,7 @@ public class Main {
 	static DBConnectController Controller;
 
 	public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException {
-		//Controller = new DBConnectController(new TestPoolView());
+		Controller = new DBConnectController(/*new TestPoolView()*/);
 		Controller.start();
 	}
 
