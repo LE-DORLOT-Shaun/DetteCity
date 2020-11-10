@@ -50,50 +50,50 @@ public class ThreadServer extends Thread {
 			outJson = new PrintWriter(clientSocket.getOutputStream(), true);
 			inJson = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-		do {
-				
-			InputStream inputStream = FileReader.class.getClassLoader().getSystemResourceAsStream("simulation.json"); 
-			// processing part of Json 
-			outJson = new PrintWriter(clientSocket.getOutputStream(), true);
-			inJson = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			this.bollards = new Bollards(this.c);
-			Object obj1 = new Object();
-			String resp = inJson.readLine();
-			System.out.println("----bonjour je viens de récuperer le JSON");
-			System.out.println(resp);
-			Object obj=JSONValue.parse(resp); 
-			System.out.println("----bonjour je parse le JSON");
-			System.out.println(resp);
-			JSONObject jsonObject = (JSONObject) obj;  
-			System.out.println("----bonjour je viens de parser le JSON");
-			System.out.println(resp);
-				
-				
-			/*calls the bornesState method from Bornes to get the states and
-			 * send the result to the client in a JSON File using the socket if 
-			 * it gets a demand from the client
-			 */
-			if(jsonObject.get("demandType").equals("getInitialInfos")) {
-				new VehiculeManagement(c);
-				System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.maxCars);
-				obj1 = bollards.bollardsState();
-				outJson.println(obj1);
-			}
-				
-			/*calls the riseBornes method from Bornes to change the states of the bornes to 1
-			 * send the success or fail messsage to the client in a JSON File using the socket
-			 */
-				
-			if(jsonObject.get("demandType").equals("RiseBornes")) {
-				obj1 = bollards.risebollards();
-				outJson.println(obj1); 
-			}
-				
-				
-			/*calls the LowerBornes method from Bollards to change the states of the bollards to 0
-			 * send the success or fail messsage to the client in a JSON File using the socket
-			 */
-				
+			do {
+
+				InputStream inputStream = FileReader.class.getClassLoader().getSystemResourceAsStream("simulation.json"); 
+				// processing part of Json 
+				outJson = new PrintWriter(clientSocket.getOutputStream(), true);
+				inJson = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+				this.bollards = new Bollards(this.c);
+				Object obj1 = new Object();
+				String resp = inJson.readLine();
+				System.out.println("----bonjour je viens de récuperer le JSON");
+				System.out.println(resp);
+				Object obj=JSONValue.parse(resp); 
+				System.out.println("----bonjour je parse le JSON");
+				System.out.println(resp);
+				JSONObject jsonObject = (JSONObject) obj;  
+				System.out.println("----bonjour je viens de parser le JSON");
+				System.out.println(resp);
+
+
+				/*calls the bornesState method from Bornes to get the states and
+				 * send the result to the client in a JSON File using the socket if 
+				 * it gets a demand from the client
+				 */
+				if(jsonObject.get("demandType").equals("getInitialInfos")) {
+					new VehiculeManagement(c);
+					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.maxCars);
+					obj1 = bollards.bollardsState();
+					outJson.println(obj1);
+				}
+
+				/*calls the riseBornes method from Bornes to change the states of the bornes to 1
+				 * send the success or fail messsage to the client in a JSON File using the socket
+				 */
+
+				if(jsonObject.get("demandType").equals("RiseBornes")) {
+					obj1 = bollards.risebollards();
+					outJson.println(obj1); 
+				}
+
+
+				/*calls the LowerBornes method from Bollards to change the states of the bollards to 0
+				 * send the success or fail messsage to the client in a JSON File using the socket
+				 */
+
 				if(jsonObject.get("demandType").equals("LowerBornes")) {
 					obj1 = bollards.lowerbollards();
 					outJson.println(obj1); 
@@ -110,12 +110,12 @@ public class ThreadServer extends Thread {
 					obj1 = cars.updateMaxCars(idJson);
 					outJson.println(obj1); 
 				}
-				
+
 				/* used to launch the thread that simulate the movements of cars in the town
 				 * by giving him the test file which represents the cars scanned by the sensors 
 				 * 
 				 */
-				
+
 				if(jsonObject.get("demandType").equals("launchSimulation")) {
 					JSONObject obja = new JSONObject();
 					obja.put("reponse", String.valueOf("la simulation a été lancé"));
@@ -123,11 +123,11 @@ public class ThreadServer extends Thread {
 					VehiculeSensors test = new VehiculeSensors(c, inputStream);
 					test.start();  
 				}
-				
+
 				/* used to get the data sent by the user and calling the method that returns 
 				 * the results in cars history and send them to the user using the socket 
 				 */
-				
+
 				if(jsonObject.get("demandType").equals("filterVehicule")) {
 					Object objSearch = new Object();
 					String dateDebut = String.valueOf(jsonObject.get("dateDebut"));
@@ -135,42 +135,42 @@ public class ThreadServer extends Thread {
 					String type = String.valueOf(jsonObject.get("type"));
 					String zone = String.valueOf(jsonObject.get("zone"));
 					VehiculeManagement cars = new VehiculeManagement(c);
-//					objSearch = cars.SearchCars(dateDebut, dateFin, zone, type);
+					//					objSearch = cars.SearchCars(dateDebut, dateFin, zone, type);
 					System.out.println("voici la liste des voitures retrouvé: ");
 					System.out.println(objSearch);
 					outJson.println(objSearch); 
 				}
-		/*******************************************************************************************
-		 * 		This part is used for performing tests on functionalities of UC : Bornes and Sensors
-		 *******************************************************************************************/
+				/*******************************************************************************************
+				 * 		This part is used for performing tests on functionalities of UC : Bornes and Sensors
+				 *******************************************************************************************/
 				BollardsTests testTechniques = new BollardsTests(c);
 				if(jsonObject.get("demandType").equals("ChangeLimitTest")) {
 					Object maxtests = new Object();
 					maxtests = testTechniques.testChangingMax();
 					outJson.println(maxtests); 
 				}
-				
+
 				if(jsonObject.get("demandType").equals("selectHistoryTest")) {
 					Object filterCars = new Object();
 					filterCars = testTechniques.SelectOnVehiculeManagement();
 					System.out.println("Voici les resultats a envoyer au client" + filterCars);
 					outJson.println(filterCars); 
 				}
-				
+
 				if(jsonObject.get("demandType").equals("insertCarsAndActualNb")) {
 					Object filterCars = new Object();
 					filterCars = testTechniques.InsertCarAndAdjustActualNb();
 					outJson.println(filterCars); 
 				}
-		/*******************************************************************************************
-		* 		END of the part used for performing tests on functionalities of UC : Bornes and Sensors
-		*******************************************************************************************/
-
+				/*******************************************************************************************
+				 * 		END of the part used for performing tests on functionalities of UC : Bornes and Sensors
+				 *******************************************************************************************/
+				System.out.println("je suis rentré dans le server");
+				System.out.println(jsonObject);
 				obj = crud(jsonObject); 
 				// Once the Json had been processed, closing the socket and releasing the connection
 
 				outJson.println(obj);
-
 				/*
 				 * DataSource.releaseConnection(c); inJson.close(); outJson.close();
 				 * clientSocket.close();
@@ -179,7 +179,7 @@ public class ThreadServer extends Thread {
 
 		}catch (Exception e) {
 			//IF CASE : INSTANCE REALDATA ET LANCEMENT METHODE footprint OUTJSON
-			
+
 			//outJson.println(obj);
 			/*DataSource.releaseConnection(c); 
 			inJson.close();
@@ -194,7 +194,7 @@ public class ThreadServer extends Thread {
 
 		DBConnectController.clientsState(false);
 	}
-	
+
 	// crud method allowing to according to customer's choice (select / insert/ update / delete) to do the request
 	private JSONObject crud(JSONObject JsonRecu)  {
 
@@ -267,7 +267,7 @@ public class ThreadServer extends Thread {
 				String prenomInsert =(String) JsonRecu.get("prenom");
 				System.out.println("bonjour voici les donnees recu apres traitement");
 				System.out.println(nomInsert +  " " + prenomInsert);
-
+				System.out.println("je suis dans l'insert bonjour"); 
 				PreparedStatement stmt3 = c.prepareStatement("insert into utilisateur(nom,prenom) values (?,?);");
 				// the request takes name and first name already retrieved 
 				stmt3.setString(1, nomInsert);
@@ -289,8 +289,8 @@ public class ThreadServer extends Thread {
 				System.out.println(obj);
 				return obj; 
 			}
-			
-			
+
+
 			if(JsonRecu.get("demandType").equals("INSERT_CAPTEUR_POLLUANT")) {
 				System.out.println("Je suis rentré dans la requête INSERT"); 
 				// recovery of data that the client had completed (name / first name
@@ -303,8 +303,8 @@ public class ThreadServer extends Thread {
 				String seuil_max_tmp =(String) JsonRecu.get("seuil_max_tmp");
 				String frequence = (String)JsonRecu.get("frequence");
 				System.out.println("bonjour voici les donnees recu apres traitement");
-			System.out.println(adresse_ip +  " " + localisation + " " + seuil_co2 + " " 
-									+ seuil_no2 + " " + seuil_pf + " " + seuil_min_tmp + " " + seuil_max_tmp + frequence+"");
+				System.out.println(adresse_ip +  " " + localisation + " " + seuil_co2 + " " 
+						+ seuil_no2 + " " + seuil_pf + " " + seuil_min_tmp + " " + seuil_max_tmp + frequence+"");
 				/*
 				 * String adresse_ip = String.valueOf(adresse_ip); String localisation =
 				 * String.valueOf(insertlocalisation); String seuil_co2 =
@@ -324,7 +324,7 @@ public class ThreadServer extends Thread {
 				stmt.setString(7,frequence);
 				stmt.setString(8, localisation);
 				// query execution 
-				
+
 				JSONObject obj=new JSONObject(); 
 				if(stmt.executeUpdate()>=1) {
 					obj.put("reponse",String.valueOf("mise à jour réussi réussi"));
@@ -343,11 +343,11 @@ public class ThreadServer extends Thread {
 				}
 
 				// if (insertion bien passé) => executer les lignes suivantes sinon dire erreur
-				
-				
-				
+
+
+
 			}
-			
+
 			if(JsonRecu.get("demandType").equals("SELECT_ALL_CAPTEUR_POLLUANT")) {
 
 				PreparedStatement stmt1 = c.prepareStatement("select * from capteur_polluant;");
@@ -382,7 +382,7 @@ public class ThreadServer extends Thread {
 
 				return obj; 
 			}
-/*			if(JsonRecu.get("demandType").equals("SEND_MESSAGE_CAPTEUR_POLLUANT")) {
+			/*			if(JsonRecu.get("demandType").equals("SEND_MESSAGE_CAPTEUR_POLLUANT")) {
 
 				//Timestamp start_date =(String) JsonRecu.get("start_date");
 				String val_co2 =(String) JsonRecu.get("val_co2");
@@ -418,14 +418,14 @@ public class ThreadServer extends Thread {
 				h.setVal_no2(val_no2);
 				h.setVal_pf(val_pf);
 				h.setVal_tmp(val_tmp);
-				
+
 				//Detection de l'alerte
 				this.detection_alerte_pollution(h);
 
 				System.out.println(obj);
 				return obj; 
 			}
-*/
+			 */
 			if(JsonRecu.get("demandType").equals("UPDATE")) {
 				System.out.println("Je suis rentré dans la requete UPDATE");
 				String nomUpdate =(String) JsonRecu.get("nom");
@@ -489,7 +489,7 @@ public class ThreadServer extends Thread {
 				SensorInsert sensorInsert = new SensorInsert(); 
 				sensorInsert.insertSensor(JsonRecu, c); 
 			}*/
-/*
+			/*
 			if (JsonRecu.get("demandType").equals("MOCK_CAR_INSERT")) {
 				System.out.println("FREQUENTATION-VOITURE");
 				CarInsert carInsert = new CarInsert(); 
@@ -501,22 +501,22 @@ public class ThreadServer extends Thread {
 				HistoricalSensorPolluantInsert historicalSensorPolluantInsert = new HistoricalSensorPolluantInsert(); 
 				historicalSensorPolluantInsert.insertHistoricalSensorPolluant(JsonRecu,c); 
 			}
-			
+
 			if (JsonRecu.get("demandType").equals("MOCK_BORNE_INSERT")) {
 				System.out.println(" BORNE"); 
 				BornesInsert bornesInsert = new BornesInsert(); 
 				bornesInsert.insertBorne(JsonRecu,c); 
 			}
-			
+
 			if (JsonRecu.get("demandType").equals("MOCK_SENSOR_CAR_INSERT")) {
 				System.out.println("Sensor car"); 
 				SensorCarInsert sensorCarInsert = new SensorCarInsert(); 
 				sensorCarInsert.insertSensorCar(JsonRecu,c); 
 			}*/
 			// FIN MOCK TEST 
-			
-						// BEGIN TEST REQUESTS
-/*
+
+			// BEGIN TEST REQUESTS
+			/*
 						if (JsonRecu.get("demandType").equals("SENSOR_INDICATOR2")) {
 
 							System.out.println("le nombre de capteurs par zone selon la date et le type (qualité de l'air, borne...."); 
@@ -526,7 +526,7 @@ public class ThreadServer extends Thread {
 							return obj; 
 
 						}*/
-/*						if (JsonRecu.get("demandType").equals("SENSOR_INDICATOR3")) {
+			/*						if (JsonRecu.get("demandType").equals("SENSOR_INDICATOR3")) {
 
 							System.out.println("le nombre de capteurs par zone selon la date et le type (qualité de l'air, borne...."); 
 							Sensor sensor = new Sensor(); 
@@ -544,7 +544,7 @@ public class ThreadServer extends Thread {
 							return obj; 
 
 						}
-					
+
 						if (JsonRecu.get("demandType").equals("CAR_INDICATOR")) {
 
 							System.out.println("le nombre de voitures par date dans la ville : "); 
@@ -552,7 +552,7 @@ public class ThreadServer extends Thread {
 							System.out.println("initialisation de la classe Car"); 
 							JSONObject obj = car.carDAO(JsonRecu,c);
 							return obj; 
-					
+
 
 						}
 						if (JsonRecu.get("demandType").equals("SENSOR_POLLUANT_INDICATOR")) {
@@ -582,7 +582,7 @@ public class ThreadServer extends Thread {
 							return obj;
 
 						}
-						
+
 						if (JsonRecu.get("demandType").equals("getWarningPolluant")) {
 
 							System.out.println("Consultation des polluants"); 
@@ -591,16 +591,16 @@ public class ThreadServer extends Thread {
 							JSONObject obj = polluant.getWarning(JsonRecu,c);
 							return obj;
 						}
-						
-						
-*/						
-					} catch (Exception e) {
-						e.printStackTrace();
-					} 
-					// Case where no if is checked 
-					return new JSONObject();
-				}
-/*	private void detection_alerte_pollution(HistoriqueCapteurPolluant h) throws SQLException {
+
+
+			 */						
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+		// Case where no if is checked 
+		return new JSONObject();
+	}
+	/*	private void detection_alerte_pollution(HistoriqueCapteurPolluant h) throws SQLException {
 		// récupration du capteur
 		CapteurPolluant cp =  this.selectCapteurPolluant(h);
 
@@ -611,7 +611,7 @@ public class ThreadServer extends Thread {
 
 		//Récupération des  dernieres historiques
 		ArrayList<HistoriqueCapteurPolluant> hists = this.getLastHistoriques(cp, this.NB_FAUSSE_ALERTE);
-		
+
 		//Vérifier si les  derniers historiques dépassent le seuil	
 		int cptCo2 = 0, cptNo2 = 0, cptPf = 0, cptTmpMax = 0, cptTmpMin=0;
 		for (HistoriqueCapteurPolluant h2 : hists) {
@@ -631,21 +631,21 @@ public class ThreadServer extends Thread {
 				cptTmpMin++;
 			}
 		}
-		
+
 		//Est ce que la valeur reçu dans h dépasse le seuil
 		if(Integer.parseInt(h.getVal_co2()) >= Integer.parseInt(cp.getSeuil_co2())) {
 			//Vérifier si les derniers historiques dépassent le seuil	
-		
+
 			if (cptCo2== this.NB_FAUSSE_ALERTE) {
 				a.setDescription("Alerte CO2: seuil dépassé : "+(h.getVal_co2()));
 				//insertion alerte
 				this.insertAlert(a);
 			}
-			
+
 		}
 		if(Integer.parseInt(h.getVal_no2()) >= Integer.parseInt(cp.getSeuil_no2())) {
 			//Vérifier si les derniers historiques dépasse le seuil 
-			
+
 			if (cptNo2== this.NB_FAUSSE_ALERTE) {
 				//création d'une alerte
 				a.setDescription("Alerte NO2: seuil dépassé : "+h.getVal_no2());
@@ -655,7 +655,7 @@ public class ThreadServer extends Thread {
 		}
 		if(Integer.parseInt(h.getVal_pf()) >= Integer.parseInt(cp.getSeuil_pf())) {
 			//Vérifier si les derniers historiques dépasse le seuil de co2	
-			
+
 			if (cptPf== this.NB_FAUSSE_ALERTE) {
 				//création d'une alerte
 				a.setDescription("Alerte PF: seuil dépassé : "+h.getVal_pf());
@@ -666,7 +666,7 @@ public class ThreadServer extends Thread {
 		if(Integer.parseInt(h.getVal_tmp()) >= Integer.parseInt(cp.getSeuil_max_tmp())) {
 
 			//Vérifier si les derniers historiques dépasse le seuil 	
-			
+
 			if (cptTmpMax== this.NB_FAUSSE_ALERTE) {
 				//création d'une alerte
 				a.setDescription("Alerte Temperature MAX : seuil dépassé: "+h.getVal_tmp());
@@ -675,9 +675,9 @@ public class ThreadServer extends Thread {
 			}
 		}
 		if(Integer.parseInt(h.getVal_tmp()) <= Integer.parseInt(cp.getSeuil_min_tmp())) {
-			
+
 			//Vérifier si les derniers historiques dépasse le seuil 	
-			
+
 			if (cptTmpMin== this.NB_FAUSSE_ALERTE) {
 				//création d'une alerte
 				a.setDescription("Alerte Temperature MIN: seuil dépassé : "+(h.getVal_no2()));
@@ -728,7 +728,7 @@ public class ThreadServer extends Thread {
 			hists.add(h);
 		}
 		return hists;
-		
+
 	}
 
 	private void insertAlert(AlertePolluant a) throws SQLException {
@@ -741,6 +741,6 @@ public class ThreadServer extends Thread {
 		// query execution 
 		stmtAlerte.execute();
 	}
-*/	
+	 */	
 
 }

@@ -13,6 +13,7 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 
 import commons.DataSource;
+import commons.JDBCConnection;
 import model.ModelTestPool;
 import socketserver.ThreadServer;
 //import view.TestPoolView;
@@ -56,9 +57,11 @@ public class DBConnectController {
 				DBConnectController.clientsState(true); 
 
 				// a connection is assigned to the client 
-
+//				co.add(JDBCConnection.getConnection());
+				
 				co.add(DataSource.getConnection());
-				//c = DataSource.getConnection();
+				
+				c = DataSource.getConnection();
 				/*shsView.printScreen("Size of the pool: "+DataSource.getSize());
 				shsView.printScreen("Number of connection asked: "+co.size());
 				c = co.get(0);
@@ -83,10 +86,10 @@ public class DBConnectController {
 	}
 	public static  synchronized void clientsState(boolean isNewConnection) {
 		numberOfConnectedClients = (isNewConnection) ? (numberOfConnectedClients + 1) : (numberOfConnectedClients - 1);
+		
 		System.out.println("====================================================");
 		System.out.println("=== Voici le nombre de clients connectés : " + numberOfConnectedClients); 
 		System.out.println("====================================================");
-
 	}
 
 }

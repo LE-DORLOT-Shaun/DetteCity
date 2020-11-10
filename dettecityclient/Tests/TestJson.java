@@ -35,6 +35,7 @@ public class TestJson {
 	private SocketClient client = new SocketClient();
 	public static Connection c; 
 	private static String URL = "jdbc:postgresql://172.31.249.135:5432/dettecitydb";
+//	private static String URL = "jdbc:postgresql://localhost:5432/dettecitydb";
 	private static String login = "toto" ;
 	private static String password = "toto";
 
@@ -115,7 +116,7 @@ public class TestJson {
 	rise the bornes by changing their state ***********************/	
 	
 	public static JSONObject riseBornes() throws SQLException, IOException,UnsupportedEncodingException {
-		System.out.println("l'état des bornes va etre modifié");
+		System.out.println("l'Ã©tat des bornes va etre modifiÃ©");
 		SocketClient client = new SocketClient();
 		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
 		JSONObject obj=new JSONObject();  //JSONObject creation
@@ -133,7 +134,7 @@ public class TestJson {
 								lower the bornes by changeing their state ***********************/
 	
 	public static JSONObject LowerBornes() throws SQLException, IOException,UnsupportedEncodingException {
-		System.out.println("l'état des bornes va etre modifié");
+		System.out.println("l'Ã©tat des bornes va etre modifiÃ©");
 		SocketClient client = new SocketClient();
 		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
 		JSONObject obj=new JSONObject();  //JSONObject creation
@@ -182,7 +183,7 @@ public class TestJson {
 			JSONObject obj = new JSONObject();
 
 			obj.put("demandType", "SENSOR_INDICATOR3");
-			System.out.println("récupération du nombre de capteurs polluant par position");
+			System.out.println("rÃ©cupÃ©ration du nombre de capteurs polluant par position");
 
 			System.out.println(obj);
 			JSONObject reponseCapPolluant = client.sendMessage2(obj);
@@ -241,7 +242,7 @@ public class TestJson {
 			JSONObject obj = new JSONObject(); // JSONObject creation
 			obj.put("demandType", "CAR_INDICATOR");
 
-			System.out.println("récupération du nombre de voitures par la date");
+			System.out.println("rÃ©cupÃ©ration du nombre de voitures par la date");
 
 			System.out.println(obj);
 
@@ -270,7 +271,7 @@ public class TestJson {
 			client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
 			JSONObject obj = new JSONObject(); // JSONObject creation
 			obj.put("demandType", "SENSOR_INDICATOR4");
-			System.out.println("récupération du nombre de capteur vehicules par position");
+			System.out.println("rÃ©cupÃ©ration du nombre de capteur vehicules par position");
 			System.out.println(obj);
 			JSONObject reponseSensorCar = client.sendMessage2(obj);
 			System.out.println("affichage rep : " + reponseSensorCar);
@@ -299,7 +300,7 @@ public class TestJson {
 			JSONObject obj = new JSONObject(); // JSONObject creation
 
 			obj.put("demandType", "STATION_INDICATOR");
-			System.out.println("récupération du nombre de station par zone ");
+			System.out.println("rÃ©cupÃ©ration du nombre de station par zone ");
 			System.out.println(obj);
 			JSONObject reponseStation = client.sendMessage2(obj);
 			System.out.println("affichage rep : " + reponseStation);
@@ -351,7 +352,7 @@ public class TestJson {
 			client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
 			JSONObject obj = new JSONObject();
 
-			System.out.println("quel est le polluant concerné : ");
+			System.out.println("quel est le polluant concernÃ© : ");
 			obj.put("nomPolluant", polluant);
 			obj.put("demandType", String.valueOf("getThresholdSensorPolluant"));
 
@@ -540,16 +541,16 @@ public class TestJson {
 		while(true) { // Menu display
 			System.out.println("########################### Menu DetteCity-client #########################");
 			System.out.println("1: Afficher");
-			System.out.println("2: Créer");
-			System.out.println("3: Mettre à jour");
+			System.out.println("2: CrÃ©er");
+			System.out.println("3: Mettre Ã  jour");
 			System.out.println("4: Supprimer");
 			System.out.println("5: Exit");
-			System.out.println("6: Tentative de connexion à la BDD depuis le client ");
-			System.out.println("7: récupération de l'indicateur du nombre de capteurs");
-			System.out.println("8: récupération de l'indicateur du nombre de voitures");
-			System.out.println("9: récupération de l'indicateur du nombre d'alertes");
-			System.out.println("10: récupération de l'indicateur du nombre de stations");
-			System.out.println("11: récupération de l'indicateur du nombre de personnes par station");
+			System.out.println("6: Tentative de connexion Ã  la BDD depuis le client ");
+			System.out.println("7: rÃ©cupÃ©ration de l'indicateur du nombre de capteurs");
+			System.out.println("8: rÃ©cupÃ©ration de l'indicateur du nombre de voitures");
+			System.out.println("9: rÃ©cupÃ©ration de l'indicateur du nombre d'alertes");
+			System.out.println("10: rÃ©cupÃ©ration de l'indicateur du nombre de stations");
+			System.out.println("11: rÃ©cupÃ©ration de l'indicateur du nombre de personnes par station");
 			System.out.println("########################### Menu DetteCity-client #########################");
 			
 			client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
@@ -572,6 +573,7 @@ public class TestJson {
 					obj.put("Id",Integer.valueOf(0)); 
 					System.out.println(obj);
 					JSONObject reponseAll = client.sendMessage(obj);
+					System.out.println("select");
 					ArrayList<JSONObject> allUsers = new ArrayList<JSONObject>();
 					allUsers = (ArrayList<JSONObject>) reponseAll.get("users");
 					for(int i = 0; i<allUsers.size();i++) {
@@ -586,7 +588,7 @@ public class TestJson {
 				case "2":
 					choice = new Scanner(System.in);
 					System.out.println("########################### SELECT #########################");
-					System.out.println("quel est l'id de l'utilisateur à afficher ? ");
+					System.out.println("quel est l'id de l'utilisateur Ã  afficher ? ");
 					int repSelect = 0;
 					try {
 						repSelect = choice.nextInt();
@@ -620,7 +622,7 @@ public class TestJson {
 				System.out.println("saisissez les informations de l'utilisateur:");
 				System.out.println("nom:");
 				String nom = sc.nextLine();
-				System.out.println("prénom:");
+				System.out.println("prÃ©nom:");
 				String prenom = sc.nextLine();
 				obj.put("demandType",String.valueOf("INSERT"));
 				obj.put("nom",String.valueOf(nom));
@@ -628,7 +630,7 @@ public class TestJson {
 				System.out.println(obj);
 				JSONObject reponse = client.sendMessage(obj);
 				String repServer = (String) reponse.get("reponse");  
-				if(repServer.equals("insertion réussi")) {
+				if(repServer.equals("insertion rÃ©ussi")) {
 					String prenomInsert = (String) reponse.get("prenom");  
 					String nomInsert = (String) reponse.get("nom");
 					System.out.println(repServer +"\n voici les informations insere: \n" + prenomInsert + "\n " + nomInsert  + "\n");  
@@ -640,9 +642,9 @@ public class TestJson {
 				break; 
 
 			case "3": 
-				// requete pour mettre à  jour la table utilisateur 
+				// requete pour mettre Ã   jour la table utilisateur 
 				System.out.println("########################### UPDATE #########################");
-				System.out.println("quel est l'id à modifier?"); 
+				System.out.println("quel est l'id Ã  modifier?"); 
 
 				String id_update = sc.nextLine();
 				Integer id_user_update = Integer.parseInt(id_update);
@@ -657,7 +659,7 @@ public class TestJson {
 				System.out.println(obj);
 				JSONObject reponseUdpade = client.sendMessage(obj);
 				String repServerUpdate = (String) reponseUdpade.get("reponse"); 
-				if(repServerUpdate.contentEquals("mise à jour reussie")) {
+				if(repServerUpdate.contentEquals("mise Ã  jour reussie")) {
 					String prenomUpdate2 = (String) reponseUdpade.get("prenom");  
 					String nomupdate2 = (String) reponseUdpade.get("nom");
 					long idCaste = (long) reponseUdpade.get("Id");
@@ -674,7 +676,7 @@ public class TestJson {
 			case "4" : 
 				// crud requete delete de la table en BDD (NamaiDB / toto) 
 				System.out.println("########################### DELETE  #########################");
-				System.out.println("quel est l'id de l'utilisateur à supprimer ?"); 
+				System.out.println("quel est l'id de l'utilisateur Ã  supprimer ?"); 
 				String id_delete = sc.nextLine();
 				Integer id_user_delete = Integer.parseInt(id_delete);
 
@@ -686,10 +688,10 @@ public class TestJson {
 				JSONObject reponseDelete = client.sendMessage(obj);
 				String repServerDelete = (String) reponseDelete.get("reponse");  
 
-				if(repServerDelete.equals("suppression réussie")) {
+				if(repServerDelete.equals("suppression rÃ©ussie")) {
 					long idCasteDelete = (long) reponseDelete.get("Id");
 					int idDelete = (int) idCasteDelete;
-					System.out.println(repServerDelete + "\n Voici l'id de le l'utilisateur à supprimer : " + idDelete);  
+					System.out.println(repServerDelete + "\n Voici l'id de le l'utilisateur Ã  supprimer : " + idDelete);  
 				}
 				else {
 					System.out.println(repServerDelete);
@@ -708,27 +710,52 @@ public class TestJson {
 				break;
 
 			case "6": 
-				//pour montrer que le client n'a pas accés a la BDD
+				//pour montrer que le client n'a pas accÃ©s a la BDD
 
 				c = createConnection(); 
 				System.out.println("nom:");
 				String nomBDD = sc.nextLine();
-				System.out.println("prénom:");
+				System.out.println("prÃ©nom:");
 				String prenomBDD = sc.nextLine();
 
 				PreparedStatement stmt3 = c.prepareStatement("insert into utilisateur(nom,prenom) values (?,?);");
 				stmt3.setString(1, nomBDD);
 				stmt3.setString(2,prenomBDD);
 				stmt3.execute();
-				break; 
+				break;
+			
+			case "7": 
+				// requete insertion dans table utilisateur
+				System.out.println("########################### INSERT #########################");
+				
+				
+				obj.put("nom","nom");
+				obj.put("prenom","prÃ©nom");
+				System.out.println(obj);
+				JSONObject reponse2 = client.sendMessage2(obj);
+				String repServer2 = (String) reponse2.get("reponse");  
+				if(repServer2.equals("insertion rï¿½ussi")) {
+					String prenomInsert = (String) reponse2.get("prenom");  
+					String nomInsert = (String) reponse2.get("nom");
+					System.out.println(repServer2 +"\n voici les informations insere: \n" + prenomInsert + "\n " + nomInsert  + "\n");  
+				}
+				else {
+					System.out.println(repServer2 +"\n");
+				}
+				client.stopConnection();
+				
+
+				break;
 
 			default:
 				System.out.println("Unrocognized command");
 				break;
+				
+			
 /*				
 			case "7": 
 				System.out.println("########################### SENSOR INDICATOR #########################");
-				System.out.println("A quel date voulez-vous récupèrer les données du capteur de la qualité de l'air? ");
+				System.out.println("A quel date voulez-vous rÃ©cupÃ¨rer les donnÃ©es du capteur de la qualitÃ© de l'air? ");
 				String date  = sc.nextLine();
 				Timestamp date2 = Timestamp.valueOf(date);
 				obj.put("demandType", "SENSOR_INDICATOR");
@@ -753,7 +780,7 @@ public class TestJson {
 			/*	
 			case "8": 
 				System.out.println("########################### CAR INDICATOR #########################");
-				System.out.println("A quel date voulez-vous récupèrer les données du capteur permettant de comptabiliser le nombre de voitures? ");
+				System.out.println("A quel date voulez-vous rÃ©cupÃ¨rer les donnÃ©es du capteur permettant de comptabiliser le nombre de voitures? ");
 				String date_car  = sc.nextLine();
 				Timestamp date_car2 = Timestamp.valueOf(date_car);
 				obj.put("demandType", "CAR_INDICATOR");
@@ -775,7 +802,7 @@ public class TestJson {
 				
 			case "9": 
 				/*System.out.println("########################### WARNING INDICATOR #########################");
-				System.out.println("A quel date voulez-vous récupèrer le nombre d'alertes ainsi que le taux de seuil de pollution de chacune ? ");
+				System.out.println("A quel date voulez-vous rÃ©cupÃ¨rer le nombre d'alertes ainsi que le taux de seuil de pollution de chacune ? ");
 				String date_warning  = sc.nextLine();
 				Timestamp date_warning2 = Timestamp.valueOf(date_warning);
 				obj.put("demandType", "WARNING_INDICATOR");
@@ -787,7 +814,7 @@ public class TestJson {
 				allWarnings = (ArrayList<WarningIndicator>) reponseAll2.get("warnings");
 				for(int i = 0; i<allWarnings.size();i++) { // Creating a loop to display all sensors in the table historique_Alerte
 					System.out.println("id_alerte: "+allWarnings.get(i).getWarningId() + 
-							" | l'état de l'alerte : "+allWarnings.get(i).getWarningState()+
+							" | l'Ã©tat de l'alerte : "+allWarnings.get(i).getWarningState()+
 							" | id_seuil: "+allWarnings.get(i).getThresholdId() +
 							" | le taux du seuil: "+allWarnings.get(i).getThreshold() +
 					" | date: "+allWarnings.get(i).getDate()); 
@@ -799,7 +826,7 @@ public class TestJson {
 			/*	
 			case "10": 
 				System.out.println("########################### STATION INDICATOR #########################");
-				System.out.println("A quel date voulez-vous récupèrer le nombre de stations dans la ville? ");
+				System.out.println("A quel date voulez-vous rÃ©cupÃ¨rer le nombre de stations dans la ville? ");
 				String date_station  = sc.nextLine();
 				Timestamp date_station2 = Timestamp.valueOf(date_station);
 				obj.put("demandType", "STATION_INDICATOR");
@@ -821,7 +848,7 @@ public class TestJson {
 				
 			/*case "11": 
 				System.out.println("###########################  PERSON PER STATION INDICATOR #########################");
-				System.out.println("A quel date voulez-vous récupèrer le nombre de stations dans la ville? ");
+				System.out.println("A quel date voulez-vous rÃ©cupÃ¨rer le nombre de stations dans la ville? ");
 				String date_pers_station  = sc.nextLine();
 				Timestamp date_pers_station2 = Timestamp.valueOf(date_pers_station);
 				obj.put("demandType", "STATION_INDICATOR");

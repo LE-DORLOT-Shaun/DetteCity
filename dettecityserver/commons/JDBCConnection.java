@@ -7,7 +7,7 @@ public class JDBCConnection {
 	ArrayList<Connection> connections;
 	ArrayList<Connection> usedConnections;
 	GetConnectionData Data;
-	private int sizeMax = 35;
+	private int sizeMax = 2;
 	private int sizeMin =1;
 	private String DRIVER_NAME;
 	private String URL;
@@ -24,16 +24,18 @@ public class JDBCConnection {
 		login= Data.getLogin();
 		password = Data.getPassword();
 		Connection con = null;
-		for(int i=0; i<sizeMax; i++) {
-			try {
-				Class.forName (DRIVER_NAME);
-			} catch (ClassNotFoundException e) {
+		if (usedConnections.size() < 2) {
+			for(int i=0; i<sizeMax; i++) {
+//			for(int i=0; i<2; i++) {
+				try {
+					Class.forName (DRIVER_NAME);
+				} catch (ClassNotFoundException e) {
 
-				e.printStackTrace();
-			}		
+					e.printStackTrace();
+				}		
 
+			}
 		}
-
 	}
 
 

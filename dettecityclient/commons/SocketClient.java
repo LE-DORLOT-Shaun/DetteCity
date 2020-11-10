@@ -32,8 +32,11 @@ public class SocketClient {
 	}
 	
 		public static JSONObject sendMessage(JSONObject JsonMsg) throws IOException {
+			
 			outJson.println(JsonMsg);
+			System.out.println("j'ai envoyé le message");
 			String resp = inJson.readLine();
+			System.out.println("j'ai reçu la réponse");
 			Object obj=JSONValue.parse(resp); 
 			JSONObject jsonObject = (JSONObject) obj;  
 			return jsonObject;
