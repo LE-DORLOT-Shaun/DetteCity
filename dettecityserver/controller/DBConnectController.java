@@ -13,7 +13,7 @@ import java.util.Scanner;
 import org.json.simple.JSONObject;
 
 import commons.DataSource;
-import commons.JDBCConnection;
+import commons.ConnectionPool;
 import model.ModelTestPool;
 import socketserver.ThreadServer;
 //import view.TestPoolView;

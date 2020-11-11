@@ -3,7 +3,7 @@ package commons;
 import java.sql.*;
 import java.util.*;
 //
-public class JDBCConnection {
+public class ConnectionPool {
 	ArrayList<Connection> connections;
 	ArrayList<Connection> usedConnections;
 	GetConnectionData Data;
@@ -15,7 +15,7 @@ public class JDBCConnection {
 	private String password;
 	
 	
-	public JDBCConnection() throws SQLException, ClassNotFoundException {
+	public ConnectionPool() throws SQLException, ClassNotFoundException {
 		connections = new ArrayList<Connection>();
 		usedConnections = new ArrayList<Connection>();
 		Data = new GetConnectionData();

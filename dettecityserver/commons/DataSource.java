@@ -1,14 +1,14 @@
 package commons;
 
 import java.sql.*;
-import commons.JDBCConnection;
+import commons.ConnectionPool;
 
 public class DataSource {
 	
-	private static JDBCConnection connectionPool;
+	private static ConnectionPool connectionPool;
 	
 	public DataSource() throws ClassNotFoundException, SQLException {
-		connectionPool = new JDBCConnection();
+		connectionPool = new ConnectionPool();
 	}
 	
 	public static Connection getConnection() throws SQLException {
