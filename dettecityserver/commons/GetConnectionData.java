@@ -16,7 +16,7 @@ public class GetConnectionData {
 		prop = new Properties();
 		try {
 
-			input = getClass().getClassLoader().getResourceAsStream("Data.properties");
+			input = getClass().getClassLoader().getResourceAsStream("data.properties");
 
 			// loads the file properties 
 			prop.load(input);
