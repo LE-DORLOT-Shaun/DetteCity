@@ -8,9 +8,9 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/DetteCity/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/DetteCity/json-simple-1.1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/DetteCity/librairies/postgresql-42.2.2.jre7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/shaun/Documents/ING2/Dette pds/namai-city-master/namai-city-master/librairies/swingx-1.6.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaun/git/DetteCity/ressources/java-json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaun/git/DetteCity/ressources/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaun/git/DetteCity/ressources/postgresql-42.2.2.jre7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/shaun/git/DetteCity/ressources/swingx-1.6.1.jar"/>
 	<classpathentry kind="output" path="dettecity/bin"/>
 </classpath>
