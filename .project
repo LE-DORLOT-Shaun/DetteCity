@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>DetteCity</name>
+	<name>dettecityshaun</name>
 	<comment></comment>
 	<projects>
-		<project>dettecity-client</project>
+		<project>dettecityclient</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
