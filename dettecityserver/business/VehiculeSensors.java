@@ -1,4 +1,4 @@
-package bollards;
+package business;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -16,8 +16,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import bollards.Bollards;
-import bollards.VehiculeManagement;
+import business.Bollards;
+import business.VehiculeManagement;
 
 public class VehiculeSensors extends Thread {
 	Connection c;

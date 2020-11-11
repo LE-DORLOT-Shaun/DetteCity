@@ -1,4 +1,4 @@
-package bollards;
+package business;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import org.json.simple.JSONObject;
-import bollards.VehiculeManagement;
+
+import business.VehiculeManagement;
 
 	/* class used to interact with the bollards in order to get the status or to change it */
 
