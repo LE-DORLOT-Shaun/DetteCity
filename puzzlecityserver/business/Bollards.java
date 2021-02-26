@@ -37,7 +37,7 @@ public class Bollards {
 			// recovery of each borne's data (id/ state/ position) 
 			borne.put("id", rs2.getInt("id"));
 			borne.put("state", rs2.getString("state"));
-			borne.put("position", rs2.getString("position"));
+			borne.put("address", rs2.getString("address"));
 			System.out.println("je suis ici" + borne);
 
 			// adding each borne to the list already created
@@ -48,8 +48,8 @@ public class Bollards {
 		obj.put("bollards", listbollards);
 		/*adding the static variables to the response (the user gets immediatly after launching the
 		 application the variables on cars) */
-		obj.put("actualCars", Integer.toString(VehiculeManagement.totalCars));
-		obj.put("maxCars", Integer.toString(VehiculeManagement.maxCars));
+		obj.put("totalVehicule", Integer.toString(VehiculeManagement.totalVehicule));
+		obj.put("threshold", Integer.toString(VehiculeManagement.threshold));
 		System.out.println("voici le json envoyé avec la liste des bornes: ");
 		// displaying the Json
 		System.out.println(obj);

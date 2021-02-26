@@ -10,15 +10,15 @@ import java.util.Date;
 import org.json.simple.JSONObject;
 
 public class VehiculeManagement {
-	public static int totalCars;
-	public static int maxCars;
+	public static int totalVehicule;
+	public static int threshold;
 	private Connection c; 
 	
 	public VehiculeManagement(Connection c) {
 		this.c = c;
 		try {
-			totalCars = getCars();
-			maxCars = carsLimit();
+			totalVehicule = getVehicule();
+			threshold = vehiculeThreshold();
 		} catch (SQLException | InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -26,7 +26,7 @@ public class VehiculeManagement {
 	
 	public VehiculeManagement() {
 		try {
-			totalCars = this.getCars();
+			totalVehicule = this.getVehicule();
 		} catch (SQLException | InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -35,31 +35,31 @@ public class VehiculeManagement {
 	/* method to get the actual number of cars in town it used in the beginning and the data are
 	 * used by the Thread server and sent to the Client
 	 */
-	public int getCars() throws SQLException, InterruptedException {
+	public int getVehicule() throws SQLException, InterruptedException {
 		PreparedStatement stmtJson = c.prepareStatement("SELECT vehicule_nb FROM traffic ORDER BY date DESC LIMIT 1");
 		ResultSet response = stmtJson.executeQuery();
 		int cpt = 0;
-		int voitures = 0;
+		int vehicule = 0;
 
 		while (response.next())  {
 			//recovery of the data of the the table in question 
 			cpt++;
-			voitures = response.getInt("vehicule_nb");
+			vehicule = response.getInt("vehicule_nb");
 		}
 		if(cpt == 0) {
-			voitures = 0;
+			vehicule = 0;
 			System.out.println("erreur lors de la recuperation des vehicules dans la ville");
 		}
-		System.out.println("nombre de vehicules actuels dans la ville: " + voitures);
+		System.out.println("nombre de vehicules actuels dans la ville: " + vehicule);
 		// displaying the json 
-		return voitures; 
+		return vehicule; 
 	}
 	
 	/* method to get the max number of cars in town it used in the beginning and the data are
 	 * used by the Thread server and sent to the Client
 	 */
 	
-	public int carsLimit() throws SQLException, InterruptedException {
+	public int vehiculeThreshold() throws SQLException, InterruptedException {
 		PreparedStatement stmtJson = c.prepareStatement("SELECT vehicule_threshold FROM threshold");
 		ResultSet response = stmtJson.executeQuery();
 		int cpt = 0;
@@ -73,6 +73,7 @@ public class VehiculeManagement {
 		if(cpt == 0) {
 			System.out.println("erreur lors de la recuperation du maxVehicules");
 		}
+		System.out.println("le seuil de vehicule autorise est : " + threshold);
 		// displaying the json 
 		return threshold; 
 	}
@@ -161,7 +162,7 @@ public class VehiculeManagement {
 			sensorType = "SensorTypeError";
 		}
 		
-		int currentNbCars = this.getCars();
+		int currentNbCars = this.getVehicule();
 		JSONObject obj=new JSONObject(); 
 		
 		if(sensorType.equals("IN")) {
@@ -196,7 +197,7 @@ public class VehiculeManagement {
 			System.out.println(obj); 
 		}
 		
-		this.totalCars = currentNbCars;
+		this.totalVehicule = currentNbCars;
 	}
 	
 /*	public Object SearchCars(String dateDebut, String dateFin, String zone, String type) throws SQLException, InterruptedException {

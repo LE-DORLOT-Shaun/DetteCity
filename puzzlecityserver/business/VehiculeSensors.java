@@ -35,6 +35,7 @@ public class VehiculeSensors extends Thread {
 	public void run() {
 		
 			try {
+				System.out.println("entrée dans run");
 				this.LaunchSimulation(this.inputStream);
 			} catch (ParseException | SQLException | IOException | InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -45,13 +46,22 @@ public class VehiculeSensors extends Thread {
 	
 	
 	public void LaunchSimulation (InputStream inputStream) throws ParseException, UnsupportedEncodingException, SQLException, IOException, InterruptedException{
-
+		System.out.println("entré dans launchSimulation");
 		StringBuffer sb = new StringBuffer();
 		VehiculeManagement carsSimulation = new VehiculeManagement(this.c);
 		Bollards bollards = new Bollards(this.c);
-		ServerSocket server = new ServerSocket(3001);
-		Socket s = server.accept();
-		DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+		System.out.println("bollard fin");
+		//ServerSocket server = new ServerSocket(3001);
+		System.out.println("après socket");
+		Socket s = null;
+		/*try{
+			s = server.accept();
+		}catch (IOException e) {
+			e.printStackTrace(); 
+		}*/
+		System.out.println("après server socket");
+		
+		//DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 		
 		
 		System.out.println("je suis rentre dans launchSimulation et deja lance la socket");
@@ -80,9 +90,9 @@ public class VehiculeSensors extends Thread {
 		/* the simulation file is parsed and transformed to a json file in order to be analyzed 
 		 * in the steps above
 		 */
-		System.out.println(json);
+		System.out.println("impression json " + json);
 		int flag;
-		if(VehiculeManagement.totalCars >= VehiculeManagement.maxCars) {
+		if(VehiculeManagement.totalVehicule >= VehiculeManagement.threshold) {
 			flag = 1;
 		}
 		else {
@@ -113,7 +123,7 @@ public class VehiculeSensors extends Thread {
 			
 			if(taille >=2.50 && taille <12) {
 				try {
-					if(VehiculeManagement.totalCars < VehiculeManagement.maxCars /*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4 || id_sensor == 6 ||id_sensor == 8 ) { 
+					if(VehiculeManagement.totalVehicule < VehiculeManagement.threshold /*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4 || id_sensor == 6 ||id_sensor == 8 ) { 
 						carsSimulation.addCarToHistory(objet, "voiture", id_sensor);
 						sleep(2000);
 						}
@@ -128,7 +138,7 @@ public class VehiculeSensors extends Thread {
 			
 			if(taille >=12) {
 				try {
-					if(VehiculeManagement.totalCars < VehiculeManagement.maxCars /*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4) { 
+					if(VehiculeManagement.totalVehicule < VehiculeManagement.threshold /*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4) { 
 					carsSimulation.addCarToHistory(objet, "poids-lourd", id_sensor);
 					sleep(2000);
 					}
@@ -145,9 +155,9 @@ public class VehiculeSensors extends Thread {
 				System.out.println("detection d'un objet de petite taille non identifié");
 			}
 			
-			System.out.println("nombre de voitures :" + VehiculeManagement.totalCars);
+			System.out.println("nombre de voitures :" + VehiculeManagement.totalVehicule);
 			
-			if(VehiculeManagement.totalCars >= VehiculeManagement.maxCars) {
+			if(VehiculeManagement.totalVehicule >= VehiculeManagement.threshold) {
 				if(flag == 0) {
 					bollards.risebollards();
 					rep.put("etat",String.valueOf("alert"));
@@ -158,7 +168,7 @@ public class VehiculeSensors extends Thread {
 			/* check if there is not a lot of cars to lower bornes; it also checks if there is no 
 			 * active pollution alert in order to do that
 			 */
-			if(VehiculeManagement.totalCars < VehiculeManagement.maxCars /* && alert.get("alerte_pollution").toString()).equals("normale") */) {
+			if(VehiculeManagement.totalVehicule < VehiculeManagement.threshold /* && alert.get("alerte_pollution").toString()).equals("normale") */) {
 				if(flag == 1) {
 					bollards.lowerbollards();
 					rep.put("etat",String.valueOf("normal"));
@@ -166,10 +176,10 @@ public class VehiculeSensors extends Thread {
 					}
 			}
 	
-			rep.put("vehicules", String.valueOf(VehiculeManagement.totalCars));
+			rep.put("vehicules", String.valueOf(VehiculeManagement.totalVehicule));
 			System.out.println(rep);
-			dos.writeUTF(rep.toString());;
-			server.close();
+			//dos.writeUTF(rep.toString());;
+			//server.close();
 
 		}
 	}

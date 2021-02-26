@@ -3,6 +3,9 @@ package commons;
 import java.sql.*;
 import commons.ConnectionPool;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 public class DataSource {
 	
 	private static ConnectionPool connectionPool;
@@ -11,9 +14,9 @@ public class DataSource {
 		connectionPool = new ConnectionPool();
 	}
 	
-	public static Connection getConnection() throws SQLException {
+/*	public static Connection getConnection() throws SQLException {
 		return connectionPool.getConnection();
-	}
+	}*/
 	
 	public static void releaseConnection(Connection c) throws SQLException {
 		connectionPool.releaseConnection(c);

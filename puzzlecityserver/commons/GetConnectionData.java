@@ -1,6 +1,7 @@
 package commons;
 
 import java.io.*;
+import java.sql.Connection;
 import java.util.Properties;
 
 public class GetConnectionData {
@@ -17,7 +18,7 @@ public class GetConnectionData {
 		try {
 
 			input = getClass().getClassLoader().getResourceAsStream("data.properties");
-
+			System.out.println("j'ai lu data.properties");
 			// loads the file properties 
 			prop.load(input);
 
@@ -39,7 +40,6 @@ public class GetConnectionData {
 			}
 		}
 	}
-
 
 	public String getDriverName() {
 		return DriverName;
@@ -65,5 +65,13 @@ public class GetConnectionData {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String createDataConnection() {
+		// TODO Auto-generated method stub
+		System.out.println("create data connection");
+		String a = "connexion réalisée";
+		return a;
+	}
+
 
 }

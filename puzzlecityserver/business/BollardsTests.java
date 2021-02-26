@@ -66,7 +66,7 @@ public class BollardsTests {
 		JSONArray testFile = getDataForTests("maxCars.json");
 		VehiculeManagement cars = new VehiculeManagement(this.c); 
 		JSONObject obj=new JSONObject();
-		System.out.println("max voitures actuels : " + VehiculeManagement.maxCars);
+		System.out.println("seuil de voitures actuel : " + VehiculeManagement.threshold);
 		
 		ArrayList<JSONObject> maxLimitsTest = new ArrayList<JSONObject>();
 		
@@ -79,7 +79,7 @@ public class BollardsTests {
 			String insert = Integer.toString(newMax);
 			max.put("max voitures: ", insert);
 			maxLimitsTest.add(max);
-			System.out.println("max voitures actuels en base apres insertion: " + cars.carsLimit());
+			System.out.println("max voitures actuels en base apres insertion: " + cars.vehiculeThreshold());
 			}
 		System.out.println(maxLimitsTest);
 		obj.put("testsResults", maxLimitsTest);
@@ -133,7 +133,7 @@ public class BollardsTests {
 			String type =  String.valueOf(jsonObject.get("type")); 
 			String objet =  String.valueOf(jsonObject.get("objet")); 
 			insertCars = cars.addCarToHistory(objet, type, id_sensor);
-			((JSONObject) insertCars).put("NbVoitures", cars.getCars());
+			((JSONObject) insertCars).put("NbVoitures", cars.getVehicule());
 			InsertionTest.add((JSONObject) insertCars);
 			}
 		obj.put("testsResults", InsertionTest);
