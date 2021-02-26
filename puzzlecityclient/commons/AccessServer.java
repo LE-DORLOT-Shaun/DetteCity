@@ -1,4 +1,4 @@
-package com;
+package commons;
 
 import java.io.FileInputStream;
 import java.io.IOException;
