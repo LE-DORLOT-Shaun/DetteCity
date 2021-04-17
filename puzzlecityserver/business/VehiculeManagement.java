@@ -107,7 +107,7 @@ public class VehiculeManagement {
 	
 	
 	public Object addCarToHistory(String vehicule, String type, int sensorId ) throws SQLException, InterruptedException {
-		System.out.println("je suis ici");
+		System.out.println("add to vehicule hitory");
 		PreparedStatement stmt = c.prepareStatement("insert into vehicule_history values(?,?,CURRENT_TIMESTAMP,?);");
 		 
 		stmt.setString(1, vehicule);
@@ -200,7 +200,7 @@ public class VehiculeManagement {
 		this.totalVehicule = currentNbCars;
 	}
 	
-/*	public Object SearchCars(String dateDebut, String dateFin, String zone, String type) throws SQLException, InterruptedException {
+	public Object SearchCars(String dateDebut, String dateFin, String zone, String type) throws SQLException, InterruptedException {
 		String request = "SELECT brand, schedule, position, cap.type as type_cap   FROM vehicule_history hv, (select * from vehicule_sensor) cap where hv.sensor_id = cap.id AND ";
 		if(type.equals("Sortie")) {
 			type = "OUT";
@@ -244,7 +244,7 @@ public class VehiculeManagement {
 		obj.put("voitures", listvoitures);
 		return obj; 
 	}
-	*/
+	
 	//function used to get the pollution alert if it is raised or not
 	
 	public Object PollutionAlert() throws SQLException, InterruptedException {

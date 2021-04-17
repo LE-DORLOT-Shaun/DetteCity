@@ -51,17 +51,13 @@ public class VehiculeSensors extends Thread {
 		VehiculeManagement carsSimulation = new VehiculeManagement(this.c);
 		Bollards bollards = new Bollards(this.c);
 		System.out.println("bollard fin");
-		//ServerSocket server = new ServerSocket(3001);
+		ServerSocket server = new ServerSocket(3001);
 		System.out.println("après socket");
-		Socket s = null;
-		/*try{
-			s = server.accept();
-		}catch (IOException e) {
-			e.printStackTrace(); 
-		}*/
+		Socket s = server.accept();
+		
 		System.out.println("après server socket");
 		
-		//DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+		DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 		
 		
 		System.out.println("je suis rentre dans launchSimulation et deja lance la socket");
@@ -113,22 +109,32 @@ public class VehiculeSensors extends Thread {
 			 * }
 			 * 
 			 */
+			System.out.println("état de flag = " + flag);
 			
 			if(objet.equals("ambulance")) {
 				carsSimulation.addCarToHistory(objet, "vehicule prioritaire", id_sensor);
 				rep.put("special", "vehicule prioritaire");
 				sleep(2000);
 				taille = 0;
-			}
+				if(VehiculeManagement.totalVehicule >= VehiculeManagement.threshold) {
+					if(flag == 0) {
+						bollards.risebollards();
+						rep.put("etat",String.valueOf("alert"));
+						flag = 1;
+						}
+				}
+			} else {
 			
 			if(taille >=2.50 && taille <12) {
 				try {
-					if(VehiculeManagement.totalVehicule < VehiculeManagement.threshold /*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4 || id_sensor == 6 ||id_sensor == 8 ) { 
+					sleep(2000);
+					if(flag == 0) {
+					//if(/*VehiculeManagement.totalVehicule < VehiculeManagement.threshold &&*/ flag == 0/*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4 || id_sensor == 6 ||id_sensor == 8 ) { 
 						carsSimulation.addCarToHistory(objet, "voiture", id_sensor);
 						sleep(2000);
 						}
 						else {
-							System.out.println("vous n'etez pas autorisé a entrer pour l'instant");
+							System.out.println("vous n'etes pas autorisé a entrer pour l'instant");
 						}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -138,7 +144,7 @@ public class VehiculeSensors extends Thread {
 			
 			if(taille >=12) {
 				try {
-					if(VehiculeManagement.totalVehicule < VehiculeManagement.threshold /*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4) { 
+					if(/*VehiculeManagement.totalVehicule < VehiculeManagement.threshold &&*/ flag == 0/*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4) { 
 					carsSimulation.addCarToHistory(objet, "poids-lourd", id_sensor);
 					sleep(2000);
 					}
@@ -164,6 +170,7 @@ public class VehiculeSensors extends Thread {
 					flag = 1;
 					}
 			}
+			}
 			
 			/* check if there is not a lot of cars to lower bornes; it also checks if there is no 
 			 * active pollution alert in order to do that
@@ -178,8 +185,8 @@ public class VehiculeSensors extends Thread {
 	
 			rep.put("vehicules", String.valueOf(VehiculeManagement.totalVehicule));
 			System.out.println(rep);
-			//dos.writeUTF(rep.toString());;
-			//server.close();
+			dos.writeUTF(rep.toString());;
+			server.close();
 
 		}
 	}
