@@ -10,9 +10,13 @@ import java.util.Scanner;
 import org.json.JSONException;
 import org.json.JSONObject;
 import commons.TestJson;
+import commons.ApplicationController;
+import view.ConnectionDetteCity;
 
 public class Main {
 	private static TestJson TJ;
+	private static ApplicationController ac;
+	private static ConnectionDetteCity test = new ConnectionDetteCity();
 
    public static void main(String[] args) {
       JSONObject json = new JSONObject();
@@ -62,6 +66,9 @@ public class Main {
 					e.printStackTrace();
 				}*/
             	
+            	
+            	 ApplicationController ac = new ApplicationController(test);
+            	 
                 while(true){
                   msg = sc.nextLine();
                   try {
