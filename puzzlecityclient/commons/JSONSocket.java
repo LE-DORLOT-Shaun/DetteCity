@@ -5,53 +5,70 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+
+
 
 public class JSONSocket {
+
 	private static Socket socketClient;
 	private static PrintWriter outJson;
 	private static BufferedReader inJson;
-	JSONObject json = new JSONObject();
-	
-	
-/*	public JSONSocket(String motif, String msg) throws JSONException, IOException {
-		final Socket clientSocket;
-		clientSocket = new Socket("172.31.249.155",6666);
-		final PrintWriter out;
-		out = new PrintWriter(clientSocket.getOutputStream());
-		// TODO Auto-generated constructor stub
-		json.put("modif", msg);
-		String msgjson = json.toString();
-		out.println(msgjson);
-		System.out.println("message transmis : " + msgjson);
-		System.out.println("avant flush");
-        out.flush();
-	}*/
+
+
 	public void startConnection(String ip, int port) throws IOException {
-				socketClient = new Socket(ip, port);
-				outJson = new PrintWriter(socketClient.getOutputStream(), true);
-				inJson = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
+		System.out.println("je crée la co");
+		socketClient = new Socket(ip, port);
+		outJson = new PrintWriter(socketClient.getOutputStream(), true);
+		inJson = new BufferedReader(new InputStreamReader(socketClient.getInputStream()));
 	}
-			
-	public static JSONObject sendMessage(JSONObject JsonMsg) throws IOException {
-					
-		outJson.println(JsonMsg);
-		System.out.println("j'ai envoyé le message");
-		String resp = inJson.readLine();
-		System.out.println("j'ai reçu la réponse" + resp);
-		Object obj=JSONValue.parse(resp);
-		System.out.println("après obj =" + obj);
-		JSONObject jsonObject = (JSONObject) obj; 
-		System.out.println("jsonObject =" + jsonObject);
+	
+		public static JSONObject sendMessage(org.json.JSONObject obj2) throws IOException {
+			outJson.println(obj2);
+			String resp = inJson.readLine();
+			Object obj=JSONValue.parse(resp);
+			JSONObject jsonObject = (JSONObject) obj;  
+			return jsonObject;
+		}
+		
+
+	public static JSONObject sendMessage2(JSONObject JsonMsg) {
+		JSONObject jsonObject = new JSONObject(); 
+		try {
+			System.out.println(JsonMsg); 
+			outJson.println(JsonMsg);
+			String resp = inJson.readLine();
+			System.out.println("==================> En String :  "  + resp);
+			Object obj=JSONValue.parse(resp); 
+			jsonObject = (JSONObject) obj;  
+			System.out.println("==================> En JSON : "  + jsonObject);
+			//JSONParser parser = new JSONParser();
+			//jsonObject=(JSONObject) parser.parse(resp);
+			/*if (resp != null ) {
+				JSONParser parser = new JSONParser();
+				jsonObject=(JSONObject) parser.parse(resp);
+				//jsonObject = (JSONObject) obj;  
+			}*/
+			//return jsonObject;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return jsonObject;
 	}
+
 	public static void stopConnection() throws IOException {
 		inJson.close();
 		outJson.close();
 		socketClient.close();
 	}
-	
 }

@@ -89,7 +89,7 @@ public class Bollards {
 	
 	public Object risebollards() throws SQLException, InterruptedException{
 			PreparedStatement stmt = c.prepareStatement("update bollards set state= ?;");
-			stmt.setInt(1, 1); 
+			stmt.setBoolean(1, true); 
 			JSONObject obj=new JSONObject();
 			if(stmt.executeUpdate()>=1) {
 				obj.put("reponse",String.valueOf("les bornes ont bien été rélevé")); 
@@ -109,7 +109,7 @@ public class Bollards {
 	
 	public Object lowerbollards() throws SQLException, InterruptedException{
 		PreparedStatement stmt = c.prepareStatement("update bollards set state= ?;");
-		stmt.setInt(1, 0); 
+		stmt.setBoolean(1, false); 
 		JSONObject obj=new JSONObject();
 		if(stmt.executeUpdate()>=1) {
 			obj.put("reponse",String.valueOf("les bornes ont bien été baissé")); 

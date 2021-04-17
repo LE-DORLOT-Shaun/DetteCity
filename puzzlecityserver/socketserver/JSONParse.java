@@ -59,7 +59,7 @@ public class JSONParse {
 				System.out.println("----bonjour je viens de parser le JSON");
 				System.out.println(resp);*/
 				
-				// if(jsonObject.get("demandType").equals("launchSimulation")) {
+				//if(jsonObject.get("demandType").equals("launchSimulation")) {
 						JSONObject obja = new JSONObject();
 						obja.put("reponse", String.valueOf("la simulation a ete lancee"));
 						outJson.println(obja); 
