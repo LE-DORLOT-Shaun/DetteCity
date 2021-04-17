@@ -128,7 +128,7 @@ public class VehiculeSensors extends Thread {
 			if(taille >=2.50 && taille <12) {
 				try {
 					sleep(2000);
-					if(flag == 0) {
+					if(flag == 0 || id_sensor == 2 || id_sensor == 4 ) {
 					//if(/*VehiculeManagement.totalVehicule < VehiculeManagement.threshold &&*/ flag == 0/*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4 || id_sensor == 6 ||id_sensor == 8 ) { 
 						carsSimulation.addCarToHistory(objet, "voiture", id_sensor);
 						sleep(2000);
