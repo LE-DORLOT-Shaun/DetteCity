@@ -88,7 +88,7 @@ public class VehiculeSensors extends Thread {
 		 */
 		System.out.println("impression json " + json);
 		int flag;
-		if(VehiculeManagement.totalVehicule >= VehiculeManagement.threshold) {
+		if(VehiculeManagement.totalVehicule >= VehiculeManagement.threshold || VehiculeManagement.alertP == true ) {
 			flag = 1;
 		}
 		else {
@@ -144,7 +144,7 @@ public class VehiculeSensors extends Thread {
 			
 			if(taille >=12) {
 				try {
-					if(/*VehiculeManagement.totalVehicule < VehiculeManagement.threshold &&*/ flag == 0/*&& !bornes.forbiddenPassage() */ || id_sensor == 2 || id_sensor == 4) { 
+					if(flag == 0 || id_sensor == 2 || id_sensor == 4) { 
 					carsSimulation.addCarToHistory(objet, "poids-lourd", id_sensor);
 					sleep(2000);
 					}
@@ -170,12 +170,17 @@ public class VehiculeSensors extends Thread {
 					flag = 1;
 					}
 			}
+			if(VehiculeManagement.alertP == true) {
+					bollards.risebollards();
+					rep.put("etat",String.valueOf("alert"));
+					flag = 1;
+			}
 			}
 			
 			/* check if there is not a lot of cars to lower bornes; it also checks if there is no 
 			 * active pollution alert in order to do that
 			 */
-			if(VehiculeManagement.totalVehicule < VehiculeManagement.threshold /* && alert.get("alerte_pollution").toString()).equals("normale") */) {
+			if(VehiculeManagement.totalVehicule < VehiculeManagement.threshold && VehiculeManagement.alertP == false/* && alert.get("alerte_pollution").toString()).equals("normale") */) {
 				if(flag == 1) {
 					bollards.lowerbollards();
 					rep.put("etat",String.valueOf("normal"));

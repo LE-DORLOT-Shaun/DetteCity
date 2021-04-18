@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 public class VehiculeManagement {
 	public static int totalVehicule;
 	public static int threshold;
+	public static boolean alertP;
 	private Connection c; 
 	
 	public VehiculeManagement(Connection c) {
@@ -19,6 +20,7 @@ public class VehiculeManagement {
 		try {
 			totalVehicule = getVehicule();
 			threshold = vehiculeThreshold();
+			alertP = getPollutionAlert();
 		} catch (SQLException | InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -249,15 +251,15 @@ public class VehiculeManagement {
 	
 	public Object PollutionAlert() throws SQLException, InterruptedException {
 		
-		PreparedStatement stmt1 = c.prepareStatement("select alerte_etat from historique_alerte ORDER BY date_debut DESC LIMIT 1;");
+		PreparedStatement stmt1 = c.prepareStatement("select state from alert ORDER BY date DESC LIMIT 1;");
 		ResultSet rs2 = stmt1.executeQuery();
 		int i = 0;
 		// creation of users list 
 		JSONObject alertePollution=new JSONObject();
 		while (rs2.next()) {
 			i++;
-			alertePollution.put("alertePollution", rs2.getString("alerte_etat"));
-			System.out.println("les bornes sont actuellement levé: " + alertePollution);
+			alertePollution.put("alertePollution", rs2.getBoolean("state"));
+			System.out.println("les bornes sont actuellement levées : " + alertePollution);
 		}
 		if(i == 0) {
 			alertePollution.put("alertePollution", String.valueOf("impossible de recuperer les donnees") );
@@ -266,6 +268,26 @@ public class VehiculeManagement {
 		else {
 			return alertePollution;
 		}
+	}
+	
+	public boolean getPollutionAlert() throws SQLException, InterruptedException {
+		PreparedStatement stmtJson = c.prepareStatement("select state from alert ORDER BY date DESC LIMIT 1;");
+		ResultSet rs3 = stmtJson.executeQuery();
+		int cpt = 0;
+		boolean pollutionAlert = false;
+
+		while (rs3.next())  {
+			//recovery of the data of the the table in question 
+			cpt++;
+			pollutionAlert = rs3.getBoolean("state");
+		}
+		if(cpt == 0) {
+			pollutionAlert = false;
+			System.out.println("erreur lors de la recuperation des alertes");
+		}
+		System.out.println("L'etat d'alerte de la ville est a : " + pollutionAlert);
+		// displaying the json 
+		return pollutionAlert; 
 	}
 	
 }

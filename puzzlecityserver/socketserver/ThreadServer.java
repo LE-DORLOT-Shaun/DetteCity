@@ -79,6 +79,11 @@ public class ThreadServer extends Thread {
 				if(jsonObject.get("demandType").equals("getInitialInfos")) {
 					new VehiculeManagement(c);
 					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.threshold);
+					boolean isalerted = VehiculeManagement.alertP;
+					if (isalerted == true) {
+						bornes.risebollards();
+					}
+					sleep(2000);
 					obj1 = bornes.bollardsState();
 					outJson.println(obj1);
 				}
@@ -109,9 +114,12 @@ public class ThreadServer extends Thread {
 					int idJson = (int) idcaste;
 					System.out.println("bonjour voici le ID recu apres traitement");
 					System.out.println(idJson);
-					VehiculeManagement cars = new VehiculeManagement(c);
-					obj1 = cars.updateMaxCars(idJson);
-					outJson.println(obj1); 
+					boolean isalerted = VehiculeManagement.alertP;
+					if (isalerted == false) {
+						VehiculeManagement cars = new VehiculeManagement(c);
+						obj1 = cars.updateMaxCars(idJson);
+						outJson.println(obj1); 
+					}
 				}
 				
 				/* used to launch the thread that simulate the movements of cars in the town
