@@ -79,6 +79,22 @@ public class TestJson {
 		
 	}
 	
+	public static org.json.simple.JSONObject getAlertP() throws SQLException, IOException,UnsupportedEncodingException, JSONException {
+		JSONSocket client = new JSONSocket();
+		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
+		System.out.println("connexion réussie");
+		JSONObject obj=new JSONObject();  //JSONObject creation
+		System.out.println("envoi du demandtype");
+		obj.put("demandType",String.valueOf("getAlertP")); 
+		System.out.println(obj);
+		org.json.simple.JSONObject reponseAlertP = client.sendMessage(obj);
+		System.out.println(reponseAlertP);
+		client.stopConnection();
+
+		return reponseAlertP; 
+		
+	}
+	
 	/* method that takes in parameter the new max vehicules authorised in town  and updates the 
 	 * the table with it by replacing the old one*/
 	

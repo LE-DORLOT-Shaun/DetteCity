@@ -80,11 +80,29 @@ public class ThreadServer extends Thread {
 					new VehiculeManagement(c);
 					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.threshold);
 					boolean isalerted = VehiculeManagement.alertP;
+					/*if (isalerted == true) {
+						bornes.risebollards();
+					}*/
+					sleep(2000);
+					obj1 = bornes.bollardsState();
+					outJson.println(obj1);
+				}
+				
+				/*calls the AlertP method from VehiculeManagement to get the states and
+				 * send the result to the client in a JSON File using the socket if 
+				 * it gets a demand from the client
+				 */
+				if(jsonObject.get("demandType").equals("getAlertP")) {
+					new VehiculeManagement(c);
+					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.threshold);
+					boolean isalerted = VehiculeManagement.alertP;
 					if (isalerted == true) {
 						bornes.risebollards();
 					}
-					sleep(2000);
-					obj1 = bornes.bollardsState();
+					System.out.println("après if getalertP");
+					//sleep(2000);
+					obj1 = bornes.PollutionAlert();
+					System.out.println("avant envoi");
 					outJson.println(obj1);
 				}
 				
@@ -112,14 +130,11 @@ public class ThreadServer extends Thread {
 				if(jsonObject.get("demandType").equals("vehiculeThreshold")) {
 					long idcaste = Long.valueOf(jsonObject.get("maxCars").toString());
 					int idJson = (int) idcaste;
-					System.out.println("bonjour voici le ID recu apres traitement");
+					System.out.println("bonjour voici le nouveau seuil reçu");
 					System.out.println(idJson);
-					boolean isalerted = VehiculeManagement.alertP;
-					if (isalerted == false) {
-						VehiculeManagement cars = new VehiculeManagement(c);
-						obj1 = cars.updateMaxCars(idJson);
-						outJson.println(obj1); 
-					}
+					VehiculeManagement cars = new VehiculeManagement(c);
+					obj1 = cars.updateMaxCars(idJson);
+					outJson.println(obj1); 
 				}
 				
 				/* used to launch the thread that simulate the movements of cars in the town
@@ -347,7 +362,7 @@ public class ThreadServer extends Thread {
 					obj.put("Seuil_Min_Tmp",seuil_min_tmp);
 					obj.put("Seuil_Max_Tmp",seuil_max_tmp);
 					System.out.println(obj);
-					return obj; 
+					return obj;
 				}
 				else {
 					obj.put("reponse",String.valueOf("erreur lors de la mise a jour verifier l'id"));

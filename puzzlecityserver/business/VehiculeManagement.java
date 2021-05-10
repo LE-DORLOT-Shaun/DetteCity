@@ -85,7 +85,7 @@ public class VehiculeManagement {
 	 */
 	
 	public JSONObject updateMaxCars(int maxCars) throws SQLException {
-		System.out.println(maxCars);
+		System.out.println("Seuil de vehicule voulu : " + maxCars);
 		PreparedStatement stmt = c.prepareStatement("update threshold set vehicule_threshold= ?, last_update= current_timestamp;");
 		stmt.setInt(1, maxCars); 
 		JSONObject obj=new JSONObject(); 
@@ -250,19 +250,20 @@ public class VehiculeManagement {
 	//function used to get the pollution alert if it is raised or not
 	
 	public Object PollutionAlert() throws SQLException, InterruptedException {
-		
+		System.out.println("dans PollutionAlert");
 		PreparedStatement stmt1 = c.prepareStatement("select state from alert ORDER BY date DESC LIMIT 1;");
 		ResultSet rs2 = stmt1.executeQuery();
 		int i = 0;
 		// creation of users list 
-		JSONObject alertePollution=new JSONObject();
+		JSONObject alertePollution = new JSONObject();
+		System.out.println("avant while");
 		while (rs2.next()) {
 			i++;
-			alertePollution.put("alertePollution", rs2.getBoolean("state"));
-			System.out.println("les bornes sont actuellement levées : " + alertePollution);
+			alertePollution.put("alertP", rs2.getBoolean("state"));
+			System.out.println("Alerte pollution : " + alertePollution);
 		}
 		if(i == 0) {
-			alertePollution.put("alertePollution", String.valueOf("impossible de recuperer les donnees") );
+			alertePollution.put("alertP", String.valueOf("impossible de recuperer les donnees") );
 			return alertePollution;
 		}
 		else {

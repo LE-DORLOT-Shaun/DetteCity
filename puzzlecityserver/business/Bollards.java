@@ -119,5 +119,25 @@ public class Bollards {
 		}
 		System.out.println(obj);
 		return obj; 
-}
+	}
+	
+	public Object PollutionAlert() throws SQLException, InterruptedException {
+		PreparedStatement stmt1 = c.prepareStatement("select state from alert ORDER BY date DESC LIMIT 1;");
+		ResultSet rs2 = stmt1.executeQuery();
+		int i = 0;
+		// creation of users list 
+		JSONObject alertePollution = new JSONObject();
+		while (rs2.next()) {
+			i++;
+			alertePollution.put("alertP", rs2.getBoolean("state"));
+			System.out.println("Alerte pollution : " + alertePollution);
+		}
+		if(i == 0) {
+			alertePollution.put("alertP", String.valueOf("impossible de recuperer les donnees") );
+			return alertePollution;
+		}
+		else {
+			return alertePollution;
+		}
+	}
 }
