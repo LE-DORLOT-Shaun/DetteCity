@@ -109,7 +109,7 @@ public class VehiculeManagement {
 	
 	
 	public Object addCarToHistory(String vehicule, String type, int sensorId ) throws SQLException, InterruptedException {
-		System.out.println("add to vehicule hitory");
+		System.out.println("add to vehicule history");
 		PreparedStatement stmt = c.prepareStatement("insert into vehicule_history values(?,?,CURRENT_TIMESTAMP,?);");
 		 
 		stmt.setString(1, vehicule);
