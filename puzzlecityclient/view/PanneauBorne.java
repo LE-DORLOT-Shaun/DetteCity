@@ -57,11 +57,12 @@ public class PanneauBorne extends JPanel implements ActionListener {
     private JLabel l1;
 	private JLabel l2;
 	private JTextField newNbMax;
-	private JButton submit;
+	private JButton submit, refresh;
 	private int maxCars;
 	private JLabel maxVehicule;
     private JLabel labelMaxCars;
     private int checkActualCars;
+    private boolean isalerted;
 		
 		
 	public PanneauBorne() {
@@ -81,9 +82,15 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		this.add(selection);
 		System.out.println("je rentre dans le PanneauBorne()");
 		
+		JSONObject AlertP = TestJson.getAlertP();
+		isalerted = Boolean.valueOf(AlertP.get("alertP").toString());
+		System.out.println("isalerted = " + isalerted);
+		System.out.println("recup alertP terminee");
+		
+		
 		//calling static method from testJson to get bornes state
-		JSONObject bornes = TestJson.getBornes();     
-	  
+		JSONObject bornes = TestJson.getBornes();
+			  
 		label = new JLabel();
 		label.setText("changement");
 			// treatment of the data received from the server and processing them and put
@@ -116,6 +123,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		    System.out.println("recup des donnees max");
 		    maxCars = Integer.valueOf((String) bornes.get("threshold"));
 		    checkActualCars = Integer.valueOf(bornes.get("totalVehicule").toString());
+		    
 		    System.out.println("recup terminee");
 		    
 		    labelNbCars = new JLabel("nombre de voitures actuellement : " + bornes.get("totalVehicule"));
@@ -188,12 +196,14 @@ public class PanneauBorne extends JPanel implements ActionListener {
 			Panneau3.setForeground(Couleur.getBgApp());
 			Panneau3.setFont(new Font("Arial", Font.BOLD, 14) );
 			Panneau3.setBorder(new LineBorder(Couleur.getBgTitle()));
-			l1 = new JLabel("vehicules max actuelles");
-			l2 = new JLabel("nouveau max vehicules");
+			l1 = new JLabel("seuil de véhicules actuel");
+			l2 = new JLabel("nouveau seuil");
 			maxVehicule = new JLabel("  "+ maxCars);
 			newNbMax = new JTextField();
 			submit = new JButton("Valider");
 			submit.addActionListener(this);
+			refresh = new JButton("Rafraichir");
+			refresh.addActionListener(this);
 			GridBagLayout a  = new GridBagLayout();
 			GridBagConstraints c = new GridBagConstraints();
 				
@@ -224,9 +234,17 @@ public class PanneauBorne extends JPanel implements ActionListener {
 			c.gridx = 2;
 			c.gridy = 1;
 			c.weightx = 0.2;
-			c.insets = new Insets(30,30,30,30);
+			c.insets = new Insets(30,30,30,250);
 			submit.setPreferredSize(new Dimension(100,25));
-			Panneau3.add(submit,c);	
+			Panneau3.add(submit,c);
+			
+			
+			c.gridx = 2;
+			c.gridy = 1;
+			c.weightx = 0.2;
+			c.insets = new Insets(30,30,30,30);
+			refresh.setPreferredSize(new Dimension(100,25));
+			Panneau3.add(refresh,c);
 				
 				//adding pannels to the different tabs and adding all these infos these tabs
 			panneauBornesOrigine.add(bouton);
@@ -234,6 +252,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 			Panneau1.add(panneauBornesOrigine);
 			    
 			Panneau2.add(panneauFiltre, BorderLayout.NORTH);
+			
 			    
 			selection.addTab("Infos bornes", Panneau1);
 			selection.addTab("Historique", Panneau2);
@@ -245,7 +264,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 //*********************************** actions on the change cars limit tab *********************		
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-		
+				
 				if(e.getSource() == submit) {	
 					try {
 						System.out.println(newNbMax.getText());
@@ -262,7 +281,8 @@ public class PanneauBorne extends JPanel implements ActionListener {
 							}
 							TestJson.riseBornes();
 						}
-						if(checkActualCars < a) {
+						System.out.println("état d'alerte : " + isalerted);
+						if(checkActualCars < a && isalerted == false) {
 							for(int i = 0; i<allBornes.size(); i++) {
 								data[i][2] = "baissé";
 							}
@@ -279,7 +299,10 @@ public class PanneauBorne extends JPanel implements ActionListener {
 						
 					} catch (NumberFormatException | SQLException | IOException e1) {
 						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						//e1.printStackTrace();
+						System.out.println("Caractères non valides");
+						JOptionPane.showMessageDialog(Panneau1, "Caractère invalide, veuillez entrer un entier");
+						
 					} catch (JSONException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -287,6 +310,39 @@ public class PanneauBorne extends JPanel implements ActionListener {
 
 				}   
 				
+			//Button to refresh the window when something is done on an other client
+				if(e.getSource() == refresh) {
+					try {
+						JSONObject AlertP = TestJson.getAlertP();
+						isalerted = Boolean.valueOf(AlertP.get("alertP").toString());
+						System.out.println("isalerted = " + isalerted);
+						System.out.println("recup alertP terminee");
+						
+						JSONObject bornes = TestJson.getBornes();
+						
+						  // initialise variables to store maxCars and actual cars in town
+						  // the JSON that contains bornes state also contains initial infos about cars in town
+						    System.out.println("recup des donnees max");
+						    maxCars = Integer.valueOf((String) bornes.get("threshold"));
+						    checkActualCars = Integer.valueOf(bornes.get("totalVehicule").toString());
+						    
+						    System.out.println("maj terminee");
+						    
+						    maxVehicule.setText("  " + String.valueOf(maxCars));
+							labelMaxCars.setText("nombre de voitures maximum :" + String.valueOf(maxCars));
+						    
+						    Panneau1.revalidate();
+							Panneau1.repaint();
+							Panneau3.revalidate();
+							Panneau3.repaint();
+						    revalidate();
+							repaint();
+					} catch (SQLException | IOException | JSONException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}
 				
 			//getting the data chosen by the user and sending them to the server using search vehicule 
 			//method and printing on the screen the data received in response 	
@@ -343,12 +399,13 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		//of cars in town. 		
 				if(e.getSource() == bouton) {	  
 					try {
+						
 						System.out.println("je suis ici je vais lancer la simulation");
 						TestJson.launchSimulation();
 						new Thread() {
 					    	public void run() {
 					    	try {
-					    	Socket s = new Socket("172.31.249.155",3001);
+					    	Socket s = new Socket("172.31.249.84",3001);
 					    	while(true) {
 					    		DataInputStream dis;
 									dis = new DataInputStream(s.getInputStream());
@@ -360,8 +417,10 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		//if the number of vehicules reachs the nb max to notify the client to change the bornes 
 									try {
 										json = (JSONObject) parser.parse(rep);
+										
 										if(json.containsKey("etat")) { 
 											if(json.get("etat").equals("alert")) {
+												isalerted = true;
 											for(int i = 0; i<allBornes.size(); i++) {
 												data[i][2] = "relevé";						
 										}
@@ -376,9 +435,11 @@ public class PanneauBorne extends JPanel implements ActionListener {
 										}
 										int nbVoitures = Integer.valueOf(json.get("vehicules").toString());
 										checkActualCars = nbVoitures;
-										if(json.containsKey("special") && nbVoitures >maxCars) {
-											System.out.println("un vehicule prioritaire entre dans la ville");
-											JOptionPane.showMessageDialog(Panneau1, "un vehicule prioritaire entre dans la ville");
+										if(json.containsKey("special")) {
+											if(nbVoitures >maxCars || isalerted == true) {
+												System.out.println("un vehicule prioritaire entre dans la ville");
+												JOptionPane.showMessageDialog(Panneau1, "un vehicule prioritaire entre dans la ville");
+											}
 									        /*Timer t = new Timer(6000, new ActionListener() {
 
 									           @Override
@@ -420,7 +481,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					System.out.println("je suis quand meme arrivé ici");
+					System.out.println("Fin panneau borne");
 					label.setText("etat change");
 				}     
 	
