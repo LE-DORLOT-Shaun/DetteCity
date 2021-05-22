@@ -87,8 +87,10 @@ public class VehiculeSensors extends Thread {
 		 * in the steps above
 		 */
 		System.out.println("impression json " + json);
+		boolean isalerted = VehiculeManagement.alertP;
 		int flag;
-		if(VehiculeManagement.totalVehicule >= VehiculeManagement.threshold || VehiculeManagement.alertP == true ) {
+		
+		if(VehiculeManagement.totalVehicule >= VehiculeManagement.threshold || isalerted == true ) {
 			flag = 1;
 		}
 		else {
