@@ -16,7 +16,7 @@ import commons.AccessServer;
 public class TestJson {	
 	private static JSONSocket client = new JSONSocket();
 	public static Connection c; 
-	private static String URL = "jdbc:postgresql://172.31.249.135:5432/dettecitydb";
+	private static String URL = "jdbc:postgresql://172.31.249.113:5432/dettecitydb";
 	private static String login = "toto" ;
 	private static String password = "toto";
 
@@ -31,12 +31,12 @@ public class TestJson {
 
 	}
 	
-	public static void main(String [] args) throws SQLException, IOException {
-	//	TestJson t = new TestJson();
+	public static void main(String [] args) throws SQLException, IOException, JSONException {
+		TestJson t = new TestJson();
 	//	Dashboard page = new Dashboard();
 	//	page.frame.setVisible(true);
 	
-		
+		t.getBornes();
 	}
 	
 	
@@ -112,6 +112,38 @@ public class TestJson {
 		return reponseMaxVehicules; 
 		
 	}
+	
+	//method to set a polution alert
+	public static org.json.simple.JSONObject setAlertP() throws SQLException, IOException,UnsupportedEncodingException, JSONException {
+		System.out.println("Une alerte pollution va être créée");
+		client = new JSONSocket();
+		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
+		JSONObject obj=new JSONObject();  //JSONObject creation
+		obj.put("demandType",String.valueOf("setAlertP")); 
+		System.out.println(obj);	
+		org.json.simple.JSONObject reponseSimulation = client.sendMessage(obj);
+		System.out.println(reponseSimulation);
+		client.stopConnection(); 
+
+		return reponseSimulation; 
+		
+	}
+	
+	//method to delete a polution alert
+		public static org.json.simple.JSONObject delAlertP() throws SQLException, IOException,UnsupportedEncodingException, JSONException {
+			System.out.println("L'alerte pollution sera annulée");
+			client = new JSONSocket();
+			client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
+			JSONObject obj=new JSONObject();  //JSONObject creation
+			obj.put("demandType",String.valueOf("delAlertP")); 
+			System.out.println(obj);	
+			org.json.simple.JSONObject reponseSimulation = client.sendMessage(obj);
+			System.out.println(reponseSimulation);
+			client.stopConnection(); 
+
+			return reponseSimulation; 
+			
+		}
 	
 	/*************************** static method that sends a demand via the socket to the server to 
 	rise the bornes by changing their state 

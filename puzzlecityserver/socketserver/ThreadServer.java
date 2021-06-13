@@ -60,7 +60,7 @@ public class ThreadServer extends Thread {
 				// processing part of Json 
 				outJson = new PrintWriter(clientSocket.getOutputStream(), true);
 				inJson = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//				this.bornes = new Bollards(this.c, this.maxCo);
+				this.bornes = new Bollards();
 				Object obj1 = new Object();
 				String resp = inJson.readLine();
 				System.out.println("----bonjour je viens de récuperer le JSON");
@@ -85,7 +85,6 @@ public class ThreadServer extends Thread {
 						bornes.risebollards();
 					}*/
 					sleep(2000);
-					this.bornes = new Bollards(this.c, this.maxCo);
 					System.out.println("avant bornes");
 					obj1 = bornes.bollardsState();
 					outJson.println(obj1);
@@ -99,7 +98,6 @@ public class ThreadServer extends Thread {
 					new VehiculeManagement();
 					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.threshold);
 					boolean isalerted = VehiculeManagement.alertP;
-					this.bornes = new Bollards(this.c, this.maxCo);
 					if (isalerted == true) {
 						bornes.risebollards();
 					}
@@ -115,21 +113,20 @@ public class ThreadServer extends Thread {
 				 */
 				
 				if(jsonObject.get("demandType").equals("RiseBornes")) {
-					this.bornes = new Bollards(this.c, this.maxCo);
 					obj1 = bornes.risebollards();
 					outJson.println(obj1); 
 				}
 				
 				
 				if(jsonObject.get("demandType").equals("setAlertP")) {
-					this.bornes = new Bollards(this.c, this.maxCo);
 					obj1 = bornes.setAlertP();
-					outJson.println(obj1); 
+					bornes.risebollards();
+					outJson.println(obj1);
 				}
 				
 				if(jsonObject.get("demandType").equals("delAlertP")) {
-					this.bornes = new Bollards(this.c, this.maxCo);
 					obj1 = bornes.delAlertP();
+					bornes.lowerbollards();
 					outJson.println(obj1); 
 				}
 				
@@ -138,7 +135,6 @@ public class ThreadServer extends Thread {
 				 */
 				
 				if(jsonObject.get("demandType").equals("LowerBornes")) {
-					this.bornes = new Bollards(this.c, this.maxCo);
 					obj1 = bornes.lowerbollards();
 					outJson.println(obj1); 
 				}

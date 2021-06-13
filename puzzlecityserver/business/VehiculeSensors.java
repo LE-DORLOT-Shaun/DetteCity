@@ -23,6 +23,7 @@ public class VehiculeSensors extends Thread {
 	Connection c;
 	InputStream inputStream;
 	private int maxCo;
+	private Bollards bollards;
 	
 	public VehiculeSensors(Connection c, InputStream inputStream, int maxCo) {
 		this.c = c;
@@ -51,7 +52,6 @@ public class VehiculeSensors extends Thread {
 		System.out.println("entré dans launchSimulation");
 		StringBuffer sb = new StringBuffer();
 		VehiculeManagement carsSimulation = new VehiculeManagement();
-		Bollards bollards = new Bollards(this.c, this.maxCo);
 		System.out.println("bollard fin");
 		ServerSocket server = new ServerSocket(3001);
 		System.out.println("après socket");

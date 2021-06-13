@@ -18,15 +18,16 @@ public class Bollards {
 
 	/* to initialise the object we must add a connection in order to get data from the data base */
 	
-	public Bollards(Connection c, int maxCo) throws SQLException, InterruptedException {
+	public Bollards() throws SQLException, InterruptedException {
 
 //		this.c = c;
-		this.c = ConnectionPool.getConnection();
+//		this.c = ConnectionPool.getConnection();
 	}
 	
 	/*method used by the server to get the bollards informations from the dataBase and also the 
 	 * the number of cars in town actually and the max cars authorised by getting the static variables */
 	public Object bollardsState() throws SQLException, InterruptedException {
+		Connection c = ConnectionPool.getConnection();
 		System.out.println("dans bornes" + c);
 		PreparedStatement stmt1 = c.prepareStatement("select * from bollards;");
 		ResultSet rs2 = stmt1.executeQuery();
@@ -93,6 +94,7 @@ public class Bollards {
  */
 	
 	public Object risebollards() throws SQLException, InterruptedException{
+			Connection c = ConnectionPool.getConnection();
 			PreparedStatement stmt = c.prepareStatement("update bollards set state= ?;");
 			stmt.setBoolean(1, true); 
 			JSONObject obj=new JSONObject();
@@ -114,6 +116,7 @@ public class Bollards {
 	 */	
 	
 	public Object lowerbollards() throws SQLException, InterruptedException{
+		Connection c = ConnectionPool.getConnection();
 		PreparedStatement stmt = c.prepareStatement("update bollards set state= ?;");
 		stmt.setBoolean(1, false); 
 		JSONObject obj=new JSONObject();
@@ -130,6 +133,7 @@ public class Bollards {
 	
 	
 	public Object setAlertP() throws SQLException, InterruptedException{
+		Connection c = ConnectionPool.getConnection();
 		System.out.println("methode de levee d'alerteP");
 		PreparedStatement stmt = c.prepareStatement("insert into alert values ('pollution', ?, current_timestamp);");
 		stmt.setBoolean(1, true); 
@@ -146,6 +150,7 @@ public class Bollards {
 	}
 	
 	public Object delAlertP() throws SQLException, InterruptedException{
+		Connection c = ConnectionPool.getConnection();
 		PreparedStatement stmt = c.prepareStatement("insert into alert values ('pollution', ?, current_timestamp);");
 		stmt.setBoolean(1, false); 
 		JSONObject obj=new JSONObject();
@@ -162,6 +167,7 @@ public class Bollards {
 	
 	
 	public Object PollutionAlert() throws SQLException, InterruptedException {
+		Connection c = ConnectionPool.getConnection();
 		PreparedStatement stmt1 = c.prepareStatement("select state from alert ORDER BY date DESC LIMIT 1;");
 		ResultSet rs2 = stmt1.executeQuery();
 		int i = 0;
