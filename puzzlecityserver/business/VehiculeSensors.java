@@ -22,10 +22,12 @@ import business.VehiculeManagement;
 public class VehiculeSensors extends Thread {
 	Connection c;
 	InputStream inputStream;
+	private int maxCo;
 	
-	public VehiculeSensors(Connection c, InputStream inputStream) {
+	public VehiculeSensors(Connection c, InputStream inputStream, int maxCo) {
 		this.c = c;
 		this.inputStream = inputStream;
+		this.maxCo = maxCo;
 	}
 	/*the class CarSensors gets the data used for the simulation and analyze these data and
 	 * proceed to the count and the insertion to the vehicules history by using methods from
@@ -48,8 +50,8 @@ public class VehiculeSensors extends Thread {
 	public void LaunchSimulation (InputStream inputStream) throws ParseException, UnsupportedEncodingException, SQLException, IOException, InterruptedException{
 		System.out.println("entré dans launchSimulation");
 		StringBuffer sb = new StringBuffer();
-		VehiculeManagement carsSimulation = new VehiculeManagement(this.c);
-		Bollards bollards = new Bollards(this.c);
+		VehiculeManagement carsSimulation = new VehiculeManagement();
+		Bollards bollards = new Bollards(this.c, this.maxCo);
 		System.out.println("bollard fin");
 		ServerSocket server = new ServerSocket(3001);
 		System.out.println("après socket");

@@ -40,11 +40,12 @@ public class ThreadServer extends Thread {
 	private Bollards bornes ;
 	private BollardsTests BollardsTests ;
 	private VehiculeManagement VM;
+	private int maxCo;
 
 
 	public ThreadServer(Socket socket, Connection connection) {
 		this.clientSocket = socket;
-		this.c = connection; 
+		this.c = connection;
 
 	}
 
@@ -59,7 +60,7 @@ public class ThreadServer extends Thread {
 				// processing part of Json 
 				outJson = new PrintWriter(clientSocket.getOutputStream(), true);
 				inJson = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-				this.bornes = new Bollards(this.c);
+//				this.bornes = new Bollards(this.c, this.maxCo);
 				Object obj1 = new Object();
 				String resp = inJson.readLine();
 				System.out.println("----bonjour je viens de récuperer le JSON");
@@ -77,13 +78,15 @@ public class ThreadServer extends Thread {
 				 * it gets a demand from the client
 				 */
 				if(jsonObject.get("demandType").equals("getInitialInfos")) {
-					new VehiculeManagement(c);
-					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.threshold);
-					boolean isalerted = VehiculeManagement.alertP;
+					new VehiculeManagement();
+//					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.threshold);
+//					boolean isalerted = VehiculeManagement.alertP;
 					/*if (isalerted == true) {
 						bornes.risebollards();
 					}*/
 					sleep(2000);
+					this.bornes = new Bollards(this.c, this.maxCo);
+					System.out.println("avant bornes");
 					obj1 = bornes.bollardsState();
 					outJson.println(obj1);
 				}
@@ -93,9 +96,10 @@ public class ThreadServer extends Thread {
 				 * it gets a demand from the client
 				 */
 				if(jsonObject.get("demandType").equals("getAlertP")) {
-					new VehiculeManagement(c);
+					new VehiculeManagement();
 					System.out.println("nombre max de véhicules dans la ville: " + VehiculeManagement.threshold);
 					boolean isalerted = VehiculeManagement.alertP;
+					this.bornes = new Bollards(this.c, this.maxCo);
 					if (isalerted == true) {
 						bornes.risebollards();
 					}
@@ -111,16 +115,30 @@ public class ThreadServer extends Thread {
 				 */
 				
 				if(jsonObject.get("demandType").equals("RiseBornes")) {
+					this.bornes = new Bollards(this.c, this.maxCo);
 					obj1 = bornes.risebollards();
 					outJson.println(obj1); 
 				}
 				
+				
+				if(jsonObject.get("demandType").equals("setAlertP")) {
+					this.bornes = new Bollards(this.c, this.maxCo);
+					obj1 = bornes.setAlertP();
+					outJson.println(obj1); 
+				}
+				
+				if(jsonObject.get("demandType").equals("delAlertP")) {
+					this.bornes = new Bollards(this.c, this.maxCo);
+					obj1 = bornes.delAlertP();
+					outJson.println(obj1); 
+				}
 				
 				/*calls the LowerBornes method from Bornes to change the states of the bornes to 0
 				 * send the success or fail messsage to the client in a JSON File using the socket
 				 */
 				
 				if(jsonObject.get("demandType").equals("LowerBornes")) {
+					this.bornes = new Bollards(this.c, this.maxCo);
 					obj1 = bornes.lowerbollards();
 					outJson.println(obj1); 
 				}
@@ -132,7 +150,7 @@ public class ThreadServer extends Thread {
 					int idJson = (int) idcaste;
 					System.out.println("bonjour voici le nouveau seuil reçu");
 					System.out.println(idJson);
-					VehiculeManagement cars = new VehiculeManagement(c);
+					VehiculeManagement cars = new VehiculeManagement();
 					obj1 = cars.updateMaxCars(idJson);
 					outJson.println(obj1); 
 				}
@@ -146,7 +164,7 @@ public class ThreadServer extends Thread {
 					JSONObject obja = new JSONObject();
 					obja.put("reponse", String.valueOf("la simulation a été lancé"));
 					outJson.println(obj1); 
-					VehiculeSensors test = new VehiculeSensors(c, inputStream);
+					VehiculeSensors test = new VehiculeSensors(c, inputStream, maxCo);
 					test.start();  
 				}
 				
@@ -160,7 +178,7 @@ public class ThreadServer extends Thread {
 					String dateFin = String.valueOf(jsonObject.get("dateFin"));
 					String type = String.valueOf(jsonObject.get("type"));
 					String zone = String.valueOf(jsonObject.get("zone"));
-					VehiculeManagement cars = new VehiculeManagement(c);
+					VehiculeManagement cars = new VehiculeManagement();
 //					objSearch = cars.SearchCars(dateDebut, dateFin, zone, type);
 					System.out.println("voici la liste des voitures retrouvé: ");
 					System.out.println(objSearch);
@@ -169,14 +187,16 @@ public class ThreadServer extends Thread {
 		/*******************************************************************************************
 		 * 		This part is used for performing tests on functionalities of UC : Bornes and Sensors
 		 *******************************************************************************************/
-				BollardsTests testTechniques = new BollardsTests(c);
+//				BollardsTests testTechniques = new BollardsTests(c, maxCo);
 				if(jsonObject.get("demandType").equals("ChangeLimitTest")) {
+					BollardsTests testTechniques = new BollardsTests(c, maxCo);
 					Object maxtests = new Object();
 					maxtests = testTechniques.testChangingMax();
 					outJson.println(maxtests); 
 				}
 				
 				if(jsonObject.get("demandType").equals("selectHistoryTest")) {
+					BollardsTests testTechniques = new BollardsTests(c, maxCo);
 					Object filterCars = new Object();
 					filterCars = testTechniques.SelectOnVehiculeManagement();
 					System.out.println("Voici les resultats a envoyer au client" + filterCars);
@@ -184,6 +204,7 @@ public class ThreadServer extends Thread {
 				}
 				
 				if(jsonObject.get("demandType").equals("insertCarsAndActualNb")) {
+					BollardsTests testTechniques = new BollardsTests(c, maxCo);
 					Object filterCars = new Object();
 					filterCars = testTechniques.InsertCarAndAdjustActualNb();
 					outJson.println(filterCars); 

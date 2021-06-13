@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 import org.json.simple.JSONObject;
 
+import commons.ConnectionPool;
+
 public class BollardsManagement {
 private Connection c;
 private int vehicule_nb;
@@ -21,7 +23,7 @@ private int vehicule_threshold;
 		System.out.println("vehicule_threshold = " + vehicule_threshold);
 		//recup nb_v
 		
-		
+		ConnectionPool.releaseConnection(c);
 	}
 	
 	public int getVehicule() throws SQLException, InterruptedException {

@@ -21,10 +21,12 @@ public class JSONParse {
 	private Connection c;
 	private static final int NB_FAUSSE_ALERTE=2;
 	private Bollards bollards;
+	private int maxCo;
 	
-	public JSONParse(Socket socket, Connection connection) {
+	public JSONParse(Socket socket, Connection connection, int maxCo) {
 		this.clientSocket = socket;
 		this.c = connection;
+		this.maxCo = maxCo;
 		run();
 	}
 	
@@ -63,7 +65,7 @@ public class JSONParse {
 						JSONObject obja = new JSONObject();
 						obja.put("reponse", String.valueOf("la simulation a ete lancee"));
 						outJson.println(obja); 
-						VehiculeSensors test = new VehiculeSensors(c, inputStream);
+						VehiculeSensors test = new VehiculeSensors(c, inputStream, maxCo);
 						test.start();  
 				 //}
 				 

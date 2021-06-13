@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.json.simple.JSONObject;
 
 import business.VehiculeManagement;
+import commons.ConnectionPool;
 
 	/* class used to interact with the bollards in order to get the status or to change it */
 
@@ -17,21 +18,23 @@ public class Bollards {
 
 	/* to initialise the object we must add a connection in order to get data from the data base */
 	
-	public Bollards(Connection c) {
-		this.c = c;
+	public Bollards(Connection c, int maxCo) throws SQLException, InterruptedException {
+
+//		this.c = c;
+		this.c = ConnectionPool.getConnection();
 	}
 	
 	/*method used by the server to get the bollards informations from the dataBase and also the 
 	 * the number of cars in town actually and the max cars authorised by getting the static variables */
 	public Object bollardsState() throws SQLException, InterruptedException {
-		
+		System.out.println("dans bornes" + c);
 		PreparedStatement stmt1 = c.prepareStatement("select * from bollards;");
 		ResultSet rs2 = stmt1.executeQuery();
-
+		System.out.println("post requete");
 		JSONObject obj=new JSONObject();
 		// creation of bollards list 
 		ArrayList<JSONObject> listbollards = new ArrayList<JSONObject>();
-
+		System.out.println("avat boucle");
 		while (rs2.next()) {
 			JSONObject borne=new JSONObject();
 			// recovery of each borne's data (id/ state/ position) 
@@ -50,9 +53,11 @@ public class Bollards {
 		 application the variables on cars) */
 		obj.put("totalVehicule", Integer.toString(VehiculeManagement.totalVehicule));
 		obj.put("threshold", Integer.toString(VehiculeManagement.threshold));
+		obj.put("alertP", Boolean.toString(VehiculeManagement.alertP));
 		System.out.println("voici le json envoyé avec la liste des bornes: ");
 		// displaying the Json
 		System.out.println(obj);
+		ConnectionPool.releaseConnection(c);
 		return obj; 
 	}
 	
@@ -98,6 +103,7 @@ public class Bollards {
 				obj.put("reponse",String.valueOf("erreur lors du changement d'état des bornes"));
 			}
 			System.out.println(obj);
+			ConnectionPool.releaseConnection(c);
 			return obj; 
 	}
 
@@ -118,8 +124,42 @@ public class Bollards {
 			obj.put("reponse",String.valueOf("erreur lors du changement d'état des bornes"));
 		}
 		System.out.println(obj);
+		ConnectionPool.releaseConnection(c);
 		return obj; 
 	}
+	
+	
+	public Object setAlertP() throws SQLException, InterruptedException{
+		System.out.println("methode de levee d'alerteP");
+		PreparedStatement stmt = c.prepareStatement("insert into alert values ('pollution', ?, current_timestamp);");
+		stmt.setBoolean(1, true); 
+		JSONObject obj=new JSONObject();
+		if(stmt.executeUpdate()>=1) {
+			obj.put("reponse",String.valueOf("Une alerte a bien ete creee")); 
+		}
+		else {
+			obj.put("reponse",String.valueOf("erreur lors de la levee d'une alerte pollution"));
+		}
+		System.out.println(obj);
+		ConnectionPool.releaseConnection(c);
+		return obj; 
+	}
+	
+	public Object delAlertP() throws SQLException, InterruptedException{
+		PreparedStatement stmt = c.prepareStatement("insert into alert values ('pollution', ?, current_timestamp);");
+		stmt.setBoolean(1, false); 
+		JSONObject obj=new JSONObject();
+		if(stmt.executeUpdate()>=1) {
+			obj.put("reponse",String.valueOf("Une alerte a bien ete supprimee")); 
+		}
+		else {
+			obj.put("reponse",String.valueOf("erreur lors de la suppression d'une alerte pollution"));
+		}
+		System.out.println(obj);
+		ConnectionPool.releaseConnection(c);
+		return obj; 
+	}
+	
 	
 	public Object PollutionAlert() throws SQLException, InterruptedException {
 		PreparedStatement stmt1 = c.prepareStatement("select state from alert ORDER BY date DESC LIMIT 1;");
@@ -134,9 +174,11 @@ public class Bollards {
 		}
 		if(i == 0) {
 			alertePollution.put("alertP", String.valueOf("impossible de recuperer les donnees") );
+			ConnectionPool.releaseConnection(c);
 			return alertePollution;
 		}
 		else {
+			ConnectionPool.releaseConnection(c);
 			return alertePollution;
 		}
 	}

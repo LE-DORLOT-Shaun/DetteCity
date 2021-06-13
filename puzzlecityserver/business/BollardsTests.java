@@ -20,12 +20,17 @@ import org.json.simple.parser.ParseException;
 
 import business.Bollards;
 import business.VehiculeManagement;
+import commons.ConnectionPool;
 
 public class BollardsTests {
 	Connection c;
+	private int maxCo;
 	
-	public BollardsTests(Connection c) {
-		this.c = c;
+	public BollardsTests(Connection c, int maxCo) throws SQLException, InterruptedException {
+//		this.c = c;
+//		System.out.println("dans BollardsTests");
+		this.c = ConnectionPool.getConnection();
+		this.maxCo = maxCo;
 	}
 	
 	public JSONArray getDataForTests(String fileName) throws UnsupportedEncodingException, ParseException {
@@ -64,7 +69,7 @@ public class BollardsTests {
 	
 	public Object testChangingMax() throws SQLException, InterruptedException, UnsupportedEncodingException, ParseException {
 		JSONArray testFile = getDataForTests("maxCars.json");
-		VehiculeManagement cars = new VehiculeManagement(this.c); 
+		VehiculeManagement cars = new VehiculeManagement(); 
 		JSONObject obj=new JSONObject();
 		System.out.println("seuil de voitures actuel : " + VehiculeManagement.threshold);
 		
@@ -79,7 +84,8 @@ public class BollardsTests {
 			String insert = Integer.toString(newMax);
 			max.put("max voitures: ", insert);
 			maxLimitsTest.add(max);
-			System.out.println("max voitures actuels en base apres insertion: " + cars.vehiculeThreshold());
+			System.out.println("max voitures actuels en base apres insertion: " + cars.vehiculeThreshold(c));
+			ConnectionPool.releaseConnection(c);
 			}
 		System.out.println(maxLimitsTest);
 		obj.put("testsResults", maxLimitsTest);
@@ -91,7 +97,7 @@ public class BollardsTests {
 	
 	public Object SelectOnVehiculeManagement() throws UnsupportedEncodingException, ParseException, SQLException, InterruptedException {
 		JSONArray testFile = getDataForTests("filterCarsTest.json");
-		VehiculeManagement cars = new VehiculeManagement(this.c); 
+		VehiculeManagement cars = new VehiculeManagement(); 
 		JSONObject obj=new JSONObject();
 		
 		ArrayList<JSONObject> carsList = new ArrayList<JSONObject>();
@@ -120,7 +126,7 @@ public class BollardsTests {
 	
 	public Object InsertCarAndAdjustActualNb() throws SQLException, InterruptedException, UnsupportedEncodingException, ParseException {
 		JSONArray testFile = getDataForTests("carsAndActualNbInsert.json");
-		VehiculeManagement cars = new VehiculeManagement(this.c); 
+		VehiculeManagement cars = new VehiculeManagement(); 
 		JSONObject obj=new JSONObject();
 		
 		ArrayList<JSONObject> InsertionTest = new ArrayList<JSONObject>();
@@ -133,7 +139,9 @@ public class BollardsTests {
 			String type =  String.valueOf(jsonObject.get("type")); 
 			String objet =  String.valueOf(jsonObject.get("objet")); 
 			insertCars = cars.addCarToHistory(objet, type, id_sensor);
-			((JSONObject) insertCars).put("NbVoitures", cars.getVehicule());
+			
+			((JSONObject) insertCars).put("NbVoitures", cars.getVehicule(c));
+			ConnectionPool.releaseConnection(c);
 			InsertionTest.add((JSONObject) insertCars);
 			}
 		obj.put("testsResults", InsertionTest);
