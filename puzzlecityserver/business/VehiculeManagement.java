@@ -98,7 +98,6 @@ public class VehiculeManagement {
 	 */
 
 	public JSONObject updateMaxCars(int maxCars) throws SQLException, InterruptedException {
-		int maxCo = 3;
 		Connection c = ConnectionPool.getConnection();
 		System.out.println("Seuil de vehicule voulu : " + maxCars);
 		PreparedStatement stmt = c

@@ -51,7 +51,7 @@ public class TestJson {
 		JSONObject obj=new JSONObject();  //JSONObject creation
 		obj.put("demandType", String.valueOf("launchSimulation")); 
 		System.out.println(obj);
-		Thread.sleep(2000); 
+		Thread.sleep(2000);
 		org.json.simple.JSONObject reponseSimulation = JSONSocket.sendMessage(obj);
 		System.out.println(reponseSimulation);
 		client.stopConnection(); 
@@ -66,9 +66,9 @@ public class TestJson {
 	public static org.json.simple.JSONObject getBornes() throws SQLException, IOException,UnsupportedEncodingException, JSONException {
 		JSONSocket client = new JSONSocket();
 		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
-		System.out.println("connexion réussie");
+//		System.out.println("connexion réussie");
 		JSONObject obj=new JSONObject();  //JSONObject creation
-		System.out.println("envoi du demandtype");
+//		System.out.println("envoi du demandtype");
 		obj.put("demandType",String.valueOf("getInitialInfos")); 
 		System.out.println(obj);	
 		org.json.simple.JSONObject reponseBornes = client.sendMessage(obj);
@@ -82,9 +82,9 @@ public class TestJson {
 	public static org.json.simple.JSONObject getAlertP() throws SQLException, IOException,UnsupportedEncodingException, JSONException {
 		JSONSocket client = new JSONSocket();
 		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
-		System.out.println("connexion réussie");
+//		System.out.println("connexion réussie");
 		JSONObject obj=new JSONObject();  //JSONObject creation
-		System.out.println("envoi du demandtype");
+//		System.out.println("envoi du demandtype");
 		obj.put("demandType",String.valueOf("getAlertP")); 
 		System.out.println(obj);
 		org.json.simple.JSONObject reponseAlertP = client.sendMessage(obj);

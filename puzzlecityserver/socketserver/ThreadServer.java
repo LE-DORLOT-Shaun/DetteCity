@@ -126,7 +126,9 @@ public class ThreadServer extends Thread {
 				
 				if(jsonObject.get("demandType").equals("delAlertP")) {
 					obj1 = bornes.delAlertP();
-					bornes.lowerbollards();
+					if(VM.threshold > VM.totalVehicule) {
+						bornes.lowerbollards();
+					}
 					outJson.println(obj1); 
 				}
 				
@@ -148,6 +150,11 @@ public class ThreadServer extends Thread {
 					System.out.println(idJson);
 					VehiculeManagement cars = new VehiculeManagement();
 					obj1 = cars.updateMaxCars(idJson);
+					if(VM.totalVehicule < idJson && VM.alertP == false) {
+						bornes.lowerbollards();
+					} else {
+						bornes.risebollards();
+					}
 					outJson.println(obj1); 
 				}
 				
@@ -158,9 +165,9 @@ public class ThreadServer extends Thread {
 				
 				if(jsonObject.get("demandType").equals("launchSimulation")) {
 					JSONObject obja = new JSONObject();
-					obja.put("reponse", String.valueOf("la simulation a été lancé"));
+					obja.put("reponse", String.valueOf("la simulation a été lancée"));
 					outJson.println(obj1); 
-					VehiculeSensors test = new VehiculeSensors(c, inputStream, maxCo);
+					VehiculeSensors test = new VehiculeSensors(inputStream);
 					test.start();  
 				}
 				

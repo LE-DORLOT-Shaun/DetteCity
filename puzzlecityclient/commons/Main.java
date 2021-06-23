@@ -26,101 +26,31 @@ public class Main {
       final PrintWriter out;
       final Scanner sc = new Scanner(System.in);//pour lire à partir du clavier
       System.out.println("Client connecté");
-      try {
+//      try {
          /*
          * les informations du serveur ( port et adresse IP ou nom d'hote
          * 127.0.0.1 est l'adresse local de la machine
          */
          //clientSocket = new Socket("127.0.0.1",5000);
-    	  clientSocket = new Socket("172.31.249.155",6666);
-    	  
+//    	  clientSocket = new Socket("172.31.249.84",6666);
+    	  //clientSocket = new JSONSocket();
+  		  //client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
     	  System.out.println("connexion réussie");
          //flux pour envoyer
-         out = new PrintWriter(clientSocket.getOutputStream());
+ //   	  out = new PrintWriter(clientSocket.getOutputStream());
          //flux pour recevoir
-         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+ //        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+         
+         ApplicationController ac = new ApplicationController(test);
+         
+           
+        
    
-         Thread envoyer = new Thread(new Runnable() {
-             String msg, msg1;
-             @Override
-              public void run() {
-            	 //String msg1 = sc.nextLine();
-            	  /*if (msg1.contentEquals("o") ) {
-            		  out.println("o");
-                      out.flush();
-            		  System.out.println("entrez le nouveau seuil en ppm");
-            		  int newth = sc.nextInt();
-            		  out.println(newth);
-                      out.flush();
-            	  } else {
-            		  
-            	  }*/
-            /*	TJ = new TestJson();
-            	try {
-					TJ.launchSimulation();
-				} catch (SQLException | IOException | JSONException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
-            	
-            	
-            	 ApplicationController ac = new ApplicationController(test);
-            	 
-                while(true){
-                  msg = sc.nextLine();
-                  try {
-                	 
-					json.put("Modif", msg);
-					String msgjson = json.toString();
-					out.println(msgjson);
-					System.out.println("message transmis : " + msgjson);
-					System.out.println("avant flush");
-	                out.flush();
-	                
-	                msg1 = sc.nextLine();
-	                json1.put("Threshold", msg1);
-					String msgjson1 = json1.toString();
-					out.println(msgjson1);
-					System.out.println("message transmis : " + msgjson1);
-					System.out.println("avant flush");
-	                out.flush();
-	                
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                  
-                }
-             }
-         });
-         envoyer.start();
-   
-        Thread recevoir = new Thread(new Runnable() {
-            String msg;
-            @Override
-            public void run() {
-               try {
-                 msg = in.readLine();
-                 while(msg!=null){
-                    System.out.println("Serveur : "+msg);
-                    msg = in.readLine();
-                 }
-                 System.out.println("Serveur déconnecté");
-                 out.close();
-                 clientSocket.close();
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
-            }
-        });
-        recevoir.start();
-   
-      } catch (IOException e) {
+/*      } catch (IOException e) {
     	  System.out.println("Erreur");
            e.printStackTrace();
       }
+*/      
   }
+  
 }
