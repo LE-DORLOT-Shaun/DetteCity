@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,13 +30,15 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import commons.DateTimePicker;
+import commons.TableModel;
 import commons.TestJson;
+import entities.Bollards;
 
 public class PanneauBorne extends JPanel implements ActionListener {
 	private JMenuItem historique, limiteVoitures;
-	private JButton bouton, BtnAlertP, submit, refresh;
-	private JTable tableau;
-	private JLabel label, labelNbCars, labelMaxCars, maxVehicule;
+	private JButton lancerSimu, BtnAlertP, submit, refresh, BtnCreate, BtnUpdate, BtnDelete;
+	private JTable tableau, tableauCars;
+	private JLabel label, labelNbCars, labelMaxCars, maxVehicule, l1, l2, l3, l4;
 	private ArrayList<JSONObject> allBornes;
 	private JComboBox liste1, liste2;
 	private Object[][] data;
@@ -47,10 +48,8 @@ public class PanneauBorne extends JPanel implements ActionListener {
 	private JScrollPane pane;
 	private Object[][] dataCars;
 	private String title[];
-	private JTable tableauCars;
-	private JPanel panneauFiltre;
-	private JLabel l1, l2;
-	private JTextField newNbMax;
+	private JPanel panneauFiltre, panneauBornesOrigine, panneauBornes, panneauBornes2;
+	private JTextField newNbMax, newAddressBollards, newIdBollards;
 	private int maxCars, checkActualCars;
 	private boolean isalerted;
 
@@ -101,14 +100,19 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		}
 
 		// creating titles of the table
+		TableModel tv = new TableModel();
+		tableau = new JTable();
 		String title[] = { "borne", "position", "état" };
 		tableau = new JTable(data, title);
+		
 		System.out.println("fin def table");
 		// creating Jpanels one that will contain the table with bornes infos and
 		// another
 		// Panel that will contain the informations about cars in town
-		JPanel panneauBornesOrigine = new JPanel();
-		JPanel panneauBornes = new JPanel();
+		
+		panneauBornes = new JPanel();
+		panneauBornes2 = new JPanel();
+		panneauBornesOrigine = new JPanel();
 		// initialise variables to store maxCars and actual cars in town
 		// the JSON that contains bornes state also contains initial infos about cars in
 		// town
@@ -132,7 +136,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		labelMaxCars.setBorder(border);
 
 		// creating the table and adding infos to the different pannels
-		Dimension d = new Dimension(400, 200);
+		Dimension d = new Dimension(400, 150);
 		tableau.setPreferredScrollableViewportSize(d);
 		Panneau1 = new JPanel();
 		Panneau1.setLayout(new BoxLayout(Panneau1, BoxLayout.Y_AXIS));
@@ -181,8 +185,8 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		boutonFiltre.addActionListener(this);
 
 		// creating the button to launch the cars simulation
-		bouton = new JButton("lancer simulation");
-		bouton.addActionListener(this);
+		lancerSimu = new JButton("lancer simulation");
+		lancerSimu.addActionListener(this);
 
 		BtnAlertP = new JButton("Alerte pollution");
 		if (isalerted == true) {
@@ -191,7 +195,19 @@ public class PanneauBorne extends JPanel implements ActionListener {
 			BtnAlertP.setBackground(Color.green);
 		}
 		BtnAlertP.addActionListener(this);
-
+		
+		BtnUpdate = new JButton("Udpate Bollards");
+		BtnUpdate.addActionListener(this);
+		BtnCreate = new JButton("Create Bollards");
+		BtnCreate.addActionListener(this);
+		BtnDelete = new JButton("Delete Bollards");
+		BtnDelete.addActionListener(this);
+		
+		l3 = new JLabel("Id Bollards : ");
+		l4 = new JLabel("Address Bollards : ");
+		newIdBollards = new JTextField();
+		newAddressBollards = new JTextField();
+		
 		// creating the third panel that is used to change the max cars allowed in town
 		Panneau3 = new JPanel();
 		Panneau3.setForeground(Couleur.getBgApp());
@@ -229,7 +245,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		c.weightx = 0.3;
 		newNbMax.setPreferredSize(new Dimension(150, 25));
 		Panneau3.add(newNbMax, c);
-
+		
 		c.gridx = 2;
 		c.gridy = 1;
 		c.weightx = 0.2;
@@ -243,11 +259,23 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		c.insets = new Insets(30, 30, 30, 30);
 		refresh.setPreferredSize(new Dimension(100, 25));
 		Panneau3.add(refresh, c);
+		
+		newIdBollards.setPreferredSize(new Dimension(150, 25));
 
+		newAddressBollards.setPreferredSize(new Dimension(150, 25));
+		
 		// adding pannels to the different tabs and adding all these infos these tabs
-		panneauBornesOrigine.add(bouton);
+		panneauBornesOrigine.add(lancerSimu);
 		panneauBornesOrigine.add(BtnAlertP);
+		panneauBornes2.add(l3);
+		panneauBornes2.add(newIdBollards);
+		panneauBornes2.add(l4);
+		panneauBornes2.add(newAddressBollards);
+		panneauBornes2.add(BtnUpdate);
+		panneauBornes2.add(BtnCreate);
+		panneauBornes2.add(BtnDelete);
 		Panneau1.add(panneauBornes);
+		Panneau1.add(panneauBornes2);
 		Panneau1.add(panneauBornesOrigine);
 
 		Panneau2.add(panneauFiltre, BorderLayout.NORTH);
@@ -291,6 +319,8 @@ public class PanneauBorne extends JPanel implements ActionListener {
 				maxCars = a;
 				maxVehicule.setText("  " + String.valueOf(a));
 				labelMaxCars.setText("nombre de voitures maximum :" + String.valueOf(a));
+				
+				JOptionPane.showMessageDialog(Panneau1, " Le seuil a bien été mis à jour");
 				Panneau1.revalidate();
 				Panneau1.repaint();
 				revalidate();
@@ -367,7 +397,207 @@ public class PanneauBorne extends JPanel implements ActionListener {
 			}
 
 		}
+		
+		if (e.getSource() == BtnUpdate) {
+			pane = new JScrollPane();
+			System.out.println(newAddressBollards.getText());
+			String address = String.valueOf(newAddressBollards.getText());
+				try {
+					
+					System.out.println(newIdBollards.getText());
+					int id = Integer.valueOf(newIdBollards.getText());
+					
+					Bollards test = new Bollards();
+					boolean IDexist = test.checkId(id);
+					if(IDexist == true) {
+						if(!address.equals("")) {
+							JSONObject UpdateBollards = TestJson.UpdateBollards(id, address);
+							
+							System.out.println(" voici l'id :" + id );
+							JSONObject bornes = TestJson.getBornes();
+							
+							this.allBornes = (ArrayList<JSONObject>) bornes.get("bollards");
+							System.out.println(this.allBornes);
+							System.out.println(" voici l'id :" + id );
+							this.data = new Object[allBornes.size()][3];
+							System.out.println("on est là");
+							String idstring = "" + id;
+							
+	/*						for (int i = 0; i < allBornes.size(); i++) {
+								String idtest = allBornes.get(i).get("id").toString();
+								if(idtest.equals(idstring) ) {
+									System.out.println("on est bien dans la boucle");
+									data[i][1] = address;
+									System.out.println("La nouvelle adresse est "  + data[i][1]);
+								}
+							}
+		*/					
+							for (int i = 0; i < allBornes.size(); i++) {
+								System.out.println(this.data[i][1]);
+								data[i][0] = allBornes.get(i).get("id");
+								data[i][1] = allBornes.get(i).get("address");
 
+								if (allBornes.get(i).get("state").equals("f")) {
+									data[i][2] = "baissé";
+								} else {
+									data[i][2] = "relevé";
+								}
+							}
+							JOptionPane.showMessageDialog(Panneau1, " La borne a bien été mise à jour");
+						} else {
+							System.out.println("Caractères non valides");
+							JOptionPane.showMessageDialog(Panneau1, " Adresse - Vide, veuillez entrer une adresse");
+
+						}
+					} else {
+						System.out.println("Caractères non valides");
+						JOptionPane.showMessageDialog(Panneau1, " Id - Id inexistant, bornes introuvable");
+					}
+					String title[] = { "borne", "position", "état" };
+					tableau = new JTable(data, title);
+					Panneau1.removeAll();
+					
+					panneauBornes = new JPanel();
+					Dimension d = new Dimension(400, 150);
+					tableau.setPreferredScrollableViewportSize(d);
+					
+					panneauBornes.add(new JScrollPane(tableau));
+					Panneau1.add(panneauBornes);
+					Panneau1.add(panneauBornes2);
+					Panneau1.add(panneauBornesOrigine);
+					
+					Panneau1.revalidate();
+					Panneau1.repaint();
+					revalidate();
+					repaint();
+				} catch (NumberFormatException | IOException | JSONException e1) {
+					// TODO Auto-generated catch block
+					//e1.printStackTrace();
+					System.out.println("Caractères non valides");
+					JOptionPane.showMessageDialog(Panneau1, " Id - Caractère invalide, entrez un entier");
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		}
+		
+		if (e.getSource() == BtnDelete) {
+			pane = new JScrollPane();
+			try {
+				System.out.println(newIdBollards.getText());
+				int id = Integer.valueOf(newIdBollards.getText());
+				Bollards test = new Bollards();
+				boolean IDexist = test.checkId(id);
+				
+				if(IDexist == true) {
+					try {
+						JSONObject DeletedBollards = TestJson.DeleteBollards(id);
+						
+						JSONObject bornes = TestJson.getBornes();
+						
+						this.allBornes = (ArrayList<JSONObject>) bornes.get("bollards");
+						this.data = new Object[allBornes.size()][3];
+						for (int i = 0; i < allBornes.size(); i++) {
+							data[i][0] = allBornes.get(i).get("id");
+							data[i][1] = allBornes.get(i).get("address");
+
+							if (allBornes.get(i).get("state").equals("f")) {
+								data[i][2] = "baissé";
+							} else {
+								data[i][2] = "relevé";
+							}
+						}
+						JOptionPane.showMessageDialog(Panneau1, " La borne a bien été supprimée");
+						String title[] = { "borne", "position", "état" };
+						tableau = new JTable(data, title);
+						Panneau1.removeAll();
+						
+						panneauBornes = new JPanel();
+						Dimension d = new Dimension(400, 150);
+						tableau.setPreferredScrollableViewportSize(d);
+						
+						panneauBornes.add(new JScrollPane(tableau));
+						Panneau1.add(panneauBornes);
+						Panneau1.add(panneauBornes2);
+						Panneau1.add(panneauBornesOrigine);
+						
+						Panneau1.revalidate();
+						Panneau1.repaint();
+						revalidate();
+						repaint();
+					} catch (IOException | JSONException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+					}
+				} else {
+					System.out.println("Caractères non valides");
+					JOptionPane.showMessageDialog(Panneau1, " Id - Id inexistant, bornes introuvable");
+				}
+				
+			} catch (NumberFormatException | SQLException | IOException | JSONException e1) {
+				// TODO Auto-generated catch block
+				//e1.printStackTrace();
+				System.out.println("Caractères non valides");
+				JOptionPane.showMessageDialog(Panneau1, " Id - Caractère invalide, entrez un entier");
+			}
+			
+			
+		}
+		
+		if (e.getSource() == BtnCreate) {
+			pane = new JScrollPane();
+			System.out.println(newAddressBollards.getText());
+			String address = String.valueOf(newAddressBollards.getText());
+			if(!address.equals("")) {
+				try {
+					JSONObject CreateBollards = TestJson.CreateBollards(address);
+					
+					JSONObject bornes = TestJson.getBornes();
+					
+					this.allBornes = (ArrayList<JSONObject>) bornes.get("bollards");
+					this.data = new Object[allBornes.size()][3];
+					for (int i = 0; i < allBornes.size(); i++) {
+
+						data[i][0] = allBornes.get(i).get("id");
+						data[i][1] = allBornes.get(i).get("address");
+
+						if (allBornes.get(i).get("state").equals("f")) {
+							data[i][2] = "baissé";
+						} else {
+							data[i][2] = "relevé";
+						}
+					}
+					JOptionPane.showMessageDialog(Panneau1, " La borne a bien été créée");
+					String title[] = { "borne", "position", "état" };
+					tableau = new JTable(data, title);
+					Panneau1.removeAll();
+					
+					panneauBornes = new JPanel();
+					Dimension d = new Dimension(400, 150);
+					tableau.setPreferredScrollableViewportSize(d);
+					
+					panneauBornes.add(new JScrollPane(tableau));
+					Panneau1.add(panneauBornes);
+					Panneau1.add(panneauBornes2);
+					Panneau1.add(panneauBornesOrigine);
+					
+					Panneau1.revalidate();
+					Panneau1.repaint();
+					revalidate();
+					repaint();
+				} catch (IOException | JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			} else {
+				System.out.println("Caractères non valides");
+				JOptionPane.showMessageDialog(Panneau1, " Adresse - Vide, veuillez entrer une adresse");
+			}
+		}
+		
 		if (e.getSource() == BtnAlertP) {
 			if (isalerted == false) {
 				try {
@@ -391,7 +621,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 
 					maxVehicule.setText("  " + String.valueOf(maxCars));
 					labelMaxCars.setText("nombre de voitures maximum :" + String.valueOf(maxCars));
-
+					
 					Panneau1.revalidate();
 					Panneau1.repaint();
 					revalidate();
@@ -497,7 +727,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 		// a new thread is created that exclusively communicate with the server and
 		// receives the number
 		// of cars in town.
-		if (e.getSource() == bouton) {
+		if (e.getSource() == lancerSimu) {
 			try {
 
 				System.out.println("je suis ici je vais lancer la simulation");
@@ -505,7 +735,8 @@ public class PanneauBorne extends JPanel implements ActionListener {
 				new Thread() {
 					public void run() {
 						try {
-							Socket s = new Socket("172.31.249.84", 3001);
+							Socket s = new Socket("localhost", 3001);
+	//						Socket s = new Socket("172.31.249.84", 3001);
 							while (true) {
 								DataInputStream dis;
 								dis = new DataInputStream(s.getInputStream());

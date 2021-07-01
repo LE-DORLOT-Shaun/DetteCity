@@ -1,19 +1,21 @@
 package socketserver;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.sql.Timestamp;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.ParseException;
-
-import commons.DataSource;
 
 //import BornesAndSensorsTests.AllTests;
 import business.Bollards;
@@ -27,9 +29,6 @@ import entities.HistoriqueCapteurPolluant;
 import indicator.Car;
 import indicator.Sensor;
 import indicator.SensorPolluant;
-
-import java.io.*; 
-import java.net.*;
 
 public class ThreadServer extends Thread {
 	private Socket clientSocket; 
@@ -156,6 +155,30 @@ public class ThreadServer extends Thread {
 						bornes.risebollards();
 					}
 					outJson.println(obj1); 
+				}
+				
+				if(jsonObject.get("demandType").equals("UpdateBollards")) {
+					long idcaste = Long.valueOf(jsonObject.get("currentID").toString());
+					int idJson = (int) idcaste;
+					String address = String.valueOf(jsonObject.get("currenttextAddress").toString());
+					System.out.println("Id bollards à modifier et new address " + idJson + address);
+					bornes.UpdateBollards(idJson, address);
+					outJson.println(obj1);
+				}
+				
+				if(jsonObject.get("demandType").equals("CreateBollards")) {
+					String address = String.valueOf(jsonObject.get("address").toString());
+					System.out.println("Nouvelle bornes " + address);
+					bornes.CreateBollards(address);
+					outJson.println(obj1); 
+				}
+				
+				if(jsonObject.get("demandType").equals("DeleteBollards")) {
+					long idcaste = Long.valueOf(jsonObject.get("id").toString());
+					int idJson = (int) idcaste;
+					System.out.println("Id bollards à supprimer " + idJson);
+					bornes.DeleteBollards(idJson);
+					outJson.println(obj1);
 				}
 				
 				/* used to launch the thread that simulate the movements of cars in the town

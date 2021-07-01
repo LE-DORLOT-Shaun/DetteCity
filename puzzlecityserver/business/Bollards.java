@@ -14,7 +14,8 @@ import commons.ConnectionPool;
 
 public class Bollards {
 	
-	private Connection c; 
+	private Connection c;
+	private VehiculeManagement VM;
 
 	/* to initialise the object we must add a connection in order to get data from the data base */
 	
@@ -35,7 +36,7 @@ public class Bollards {
 		JSONObject obj=new JSONObject();
 		// creation of bollards list 
 		ArrayList<JSONObject> listbollards = new ArrayList<JSONObject>();
-		System.out.println("avat boucle");
+		System.out.println("avant boucle");
 		while (rs2.next()) {
 			JSONObject borne=new JSONObject();
 			// recovery of each borne's data (id/ state/ position) 
@@ -52,9 +53,9 @@ public class Bollards {
 		obj.put("bollards", listbollards);
 		/*adding the static variables to the response (the user gets immediatly after launching the
 		 application the variables on cars) */
-		obj.put("totalVehicule", Integer.toString(VehiculeManagement.totalVehicule));
-		obj.put("threshold", Integer.toString(VehiculeManagement.threshold));
-		obj.put("alertP", Boolean.toString(VehiculeManagement.alertP));
+		obj.put("totalVehicule", Integer.toString(VM.totalVehicule));
+		obj.put("threshold", Integer.toString(VM.threshold));
+		obj.put("alertP", Boolean.toString(VM.alertP));
 		System.out.println("voici le json envoyé avec la liste des bornes: ");
 		// displaying the Json
 		System.out.println(obj);
@@ -88,6 +89,67 @@ public class Bollards {
 		}
 	}
 	
+	public Object UpdateBollards(int id, String address) throws SQLException, InterruptedException {
+		Connection c = ConnectionPool.getConnection();
+		PreparedStatement stmt = c.prepareStatement("update bollards set address = ? where id = ?;");
+		stmt.setString(1, address); 
+		stmt.setInt(2, id); 
+		JSONObject obj = new JSONObject();
+		if(stmt.executeUpdate()>=1) {
+			obj.put("reponse",String.valueOf("les bornes ont bien été mis à jour")); 
+		}
+		else {
+			obj.put("reponse",String.valueOf("erreur lors de la mis à jour des bornes"));
+		}
+		ConnectionPool.releaseConnection(c);
+		return obj;
+	}
+	
+	public Object DeleteBollards(int id) throws SQLException, InterruptedException {
+		// TODO Auto-generated method stub
+		Connection c = ConnectionPool.getConnection();
+		PreparedStatement stmt = c.prepareStatement("delete from bollards where id = ?;");
+		stmt.setInt(1, id);
+		JSONObject obj = new JSONObject();
+		if(stmt.executeUpdate()>=1) {
+			obj.put("reponse",String.valueOf("la borne a bien été supprimée")); 
+		}
+		else {
+			obj.put("reponse",String.valueOf("erreur lors de la suppression des bornes"));
+		}
+		ConnectionPool.releaseConnection(c);
+		return obj;
+	}
+	
+	public Object CreateBollards(String address) throws SQLException, InterruptedException {
+		// TODO Auto-generated method stub
+		boolean bollardsstate;
+/*		if (VM.totalVehicule >= VM.threshold || VM.alertP == true) {
+			bollardsstate = true;
+		} else {
+			bollardsstate = false;
+		}
+*/		Connection c = ConnectionPool.getConnection();
+		PreparedStatement stmt = c.prepareStatement("insert into bollards(state, address) values (?, ?);");
+		stmt.setBoolean(1, true); 
+		stmt.setString(2, address);
+		JSONObject obj = new JSONObject();
+		if(stmt.executeUpdate()>=1) {
+			obj.put("reponse",String.valueOf("la borne a bien été créée")); 
+		}
+		else {
+			obj.put("reponse",String.valueOf("erreur lors de la création de la borne"));
+		}
+		
+		if(VM.totalVehicule < VM.threshold && VM.alertP == false) {
+			lowerbollards();
+		} else {
+			risebollards();
+		}
+		
+		ConnectionPool.releaseConnection(c);
+		return obj;
+	}
 /* method to change the bollards state in dataBase in order to rise them by updating the state
  * 1 => bollards rised
  * 0 => bollards lowered 	

@@ -211,6 +211,52 @@ public class TestJson {
 		return reponseSearch; 
 		
 	}
+
+	public static org.json.simple.JSONObject UpdateBollards(int currentID, String currenttextAddress) throws IOException, JSONException {
+		// TODO Auto-generated method stub
+		client = new JSONSocket();
+		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
+		JSONObject obj=new JSONObject();  //JSONObject creation
+		obj.put("demandType",String.valueOf("UpdateBollards")); 
+		obj.put("currentID",Integer.valueOf(currentID));
+		obj.put("currenttextAddress",String.valueOf(currenttextAddress));
+		System.out.println(obj);	
+		org.json.simple.JSONObject reponseSimulation = client.sendMessage(obj);
+		System.out.println(reponseSimulation);
+		client.stopConnection(); 
+
+		return reponseSimulation;
+	}
+
+	public static org.json.simple.JSONObject CreateBollards(String address) throws IOException, JSONException {
+		// TODO Auto-generated method stub
+		client = new JSONSocket();
+		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
+		JSONObject obj=new JSONObject();  //JSONObject creation
+		obj.put("demandType",String.valueOf("CreateBollards"));
+		obj.put("address",String.valueOf(address));
+		System.out.println(obj);	
+		org.json.simple.JSONObject reponseSimulation = client.sendMessage(obj);
+		System.out.println(reponseSimulation);
+		client.stopConnection(); 
+
+		return reponseSimulation;
+	}
+
+	public static org.json.simple.JSONObject DeleteBollards(int id) throws IOException, JSONException {
+		// TODO Auto-generated method stub
+		client = new JSONSocket();
+		client.startConnection(AccessServer.getSERVER(), AccessServer.getPORT_SERVER());
+		JSONObject obj=new JSONObject();  //JSONObject creation
+		obj.put("demandType",String.valueOf("DeleteBollards"));
+		obj.put("id",Integer.valueOf(id));
+		System.out.println(obj);
+		org.json.simple.JSONObject reponseSimulation = client.sendMessage(obj);
+		System.out.println(reponseSimulation);
+		client.stopConnection(); 
+
+		return reponseSimulation;
+	}
 	
 	
 }
