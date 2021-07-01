@@ -341,25 +341,41 @@ public class PanneauBorne extends JPanel implements ActionListener {
 
 		// Button to refresh the window when something is done on an other client
 		if (e.getSource() == refresh) {
+			pane = new JScrollPane();
 			try {
 				
 				JSONObject getAlertP = TestJson.getAlertP();
 				isalerted = Boolean.valueOf(getAlertP.get("alertP").toString());
 				System.out.println("isalerted = " + isalerted);
 				System.out.println("recup alertP terminee");
+				
+				JSONObject bornes = TestJson.getBornes();
+				this.allBornes = (ArrayList<JSONObject>) bornes.get("bollards");
+				this.data = new Object[allBornes.size()][3];
+				
+				for (int i = 0; i < allBornes.size(); i++) {
 
-				if (isalerted == true) {
-					BtnAlertP.setBackground(Color.red);
-					for (int i = 0; i < allBornes.size(); i++) {
+					data[i][0] = allBornes.get(i).get("id");
+					data[i][1] = allBornes.get(i).get("address");
+
+					if (allBornes.get(i).get("state").equals("f")) {
+						data[i][2] = "baissé";
+					} else {
 						data[i][2] = "relevé";
 					}
-				} else {
+				}
+				if (isalerted == true) {
+					BtnAlertP.setBackground(Color.red);
+/*					for (int i = 0; i < allBornes.size(); i++) {
+						data[i][2] = "relevé";
+					}
+*/				} else {
 					BtnAlertP.setBackground(Color.green);
-					for (int i = 0; i < allBornes.size(); i++) {
+/*					for (int i = 0; i < allBornes.size(); i++) {
 						data[i][2] = "baissé";
 					}
-				}
-				JSONObject bornes = TestJson.getBornes();
+	*/			}
+				
 				
 				maxCars = Integer.valueOf((String) bornes.get("threshold"));
 				checkActualCars = Integer.valueOf(bornes.get("totalVehicule").toString());
@@ -368,7 +384,7 @@ public class PanneauBorne extends JPanel implements ActionListener {
 				labelNbCars.setText("nombre de voitures actuellement : " + checkActualCars);
 				labelMaxCars.setText("nombre de voitures maximum :" + maxCars);
 				
-				if (checkActualCars >= maxCars) {
+/*				if (checkActualCars >= maxCars) {
 					for (int i = 0; i < allBornes.size(); i++) {
 						data[i][2] = "relevé";
 					}
@@ -379,12 +395,25 @@ public class PanneauBorne extends JPanel implements ActionListener {
 						data[i][2] = "baissé";
 					}
 				}
-				
+*/				
 				System.out.println("affichage max");
 				
 				maxVehicule.setText("  " + String.valueOf(maxCars));
 //				labelMaxCars.setText("nombre de voitures maximum :" + String.valueOf(maxCars));
-
+				
+				String title[] = { "borne", "position", "état" };
+				tableau = new JTable(data, title);
+				Panneau1.removeAll();
+				
+				panneauBornes = new JPanel();
+				Dimension d = new Dimension(400, 150);
+				tableau.setPreferredScrollableViewportSize(d);
+				
+				panneauBornes.add(new JScrollPane(tableau));
+				Panneau1.add(panneauBornes);
+				Panneau1.add(panneauBornes2);
+				Panneau1.add(panneauBornesOrigine);
+				
 				Panneau1.revalidate();
 				Panneau1.repaint();
 				Panneau3.revalidate();
@@ -735,8 +764,8 @@ public class PanneauBorne extends JPanel implements ActionListener {
 				new Thread() {
 					public void run() {
 						try {
-							Socket s = new Socket("localhost", 3001);
-	//						Socket s = new Socket("172.31.249.84", 3001);
+//							Socket s = new Socket("localhost", 3001);
+							Socket s = new Socket("172.31.249.84", 3001);
 							while (true) {
 								DataInputStream dis;
 								dis = new DataInputStream(s.getInputStream());
